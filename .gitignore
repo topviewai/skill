@@ -1,0 +1,4 @@
+__pycache__/
+*.py[cod]
+scripts/__pycache__/
+scripts/shared/__pycache__/
