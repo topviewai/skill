@@ -22,7 +22,7 @@ RESPONSE_CODES = {
     "4006": "Request refuse",
     "4007": "Exists unfinished task, please wait",
     "4100": "Credit not enough",
-    "5000": "Internal server error",
+    "5000": "Internal server error, please report at https://www.topview.ai with task type and taskId (e.g. 'avatar4 task failed, taskId: abc123')",
     "5001": "Feign invoke error",
     "5003": "Server is busy, please try again later",
     "5004": "I/O error occurred",
@@ -69,7 +69,7 @@ class TopviewClient:
     def _check(self, data: dict) -> dict:
         code = str(data.get("code", ""))
         if code != "200":
-            msg = data.get("message", RESPONSE_CODES.get(code, "Unknown error"))
+            msg = data.get("message", RESPONSE_CODES.get(code, "Unknown error") + f", response: {data}")
             raise TopviewError(code, msg)
         return data.get("result", data)
 

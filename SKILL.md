@@ -51,6 +51,15 @@ Decision tree:
   → task status=fail?      resubmit with `run`
 ```
 
+**Task Status:**
+
+| Status | Description |
+|--------|-------------|
+| `init` | Task is queued, waiting to be processed |
+| `running` | Task is actively being processed |
+| `success` | Task completed successfully |
+| `fail` | Task failed |
+
 ## Board ID Protocol
 
 > **Every generation task should include a `--board-id` so results are organized and viewable on the web.**
