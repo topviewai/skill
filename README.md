@@ -40,13 +40,13 @@ The real power is chaining these capabilities together. Describe a goal and the 
 
 **Product demo with narration** — "Walk through the features of this app using these screenshots." The AI generates narration from your feature descriptions, animates each screenshot into video clips, and creates avatar intro/outro segments. A polished demo from static screenshots.
 
-**Your imagination is the only limit** — the examples above are just starting points. You can freely combine image generation, video creation, avatar, voice cloning, background removal, and more into any workflow you can think of. Describe your creative vision in your own words, and the AI will figure out how to make it happen.
-
 ### How It Works
 
 1. **Install** — `npx skills add topviewai/skill`
 2. **Log in** — run `python scripts/auth.py login` (one-time setup)
 3. **Create** — tell the AI what you want in plain language. It picks the right tools, models, and parameters automatically.
+
+**Your imagination is the only limit** — the examples above are just starting points. You can freely combine image generation, video creation, avatar, voice cloning, background removal, and more into any workflow you can think of. Describe your creative vision in your own words, and the AI will figure out how to make it happen.
 
 ## Installation
 
