@@ -1,6 +1,6 @@
 ---
 name: topview-skill
-description: "Generate, Edit, Collaborate. Access all mainstream AI models in one toolkit. Simply describe your vision to create videos, images, and avatars—zero manual operations."
+description: "One-sentence video, image, and avatar creation. Access all mainstream AI models in one toolkit — describe your vision in natural language to generate videos, images, talking avatars, and audio. Batch-produce or chain capabilities into full creative workflows, zero manual operations."
 metadata:
   tags: topview, avatar, video, image, voice, ai, api, i2v, t2v, omni, text2image, image_edit, tts, voice_clone, board
   requires:
@@ -17,6 +17,31 @@ metadata:
 - 🧠 **All Mainstream Models**: Seamlessly access the world's top-tier AI models for video, image, and voice in one toolkit.
 - 🗣️ **Describe to Create**: Just tell the agent what you want. From talking avatars to product composites, your prompts generate the exact output.
 - ⚡ **Zero Manual Ops**: No manual uploads, no tedious tweaking. Everything is automated straight to your shared board.
+
+## What You Can Do
+
+> You don't need to know any API details. Just describe what you want — the agent reads the technical docs below and handles everything.
+
+**Single tasks — one sentence, one result:**
+
+- Describe an image and get it generated in seconds — or batch-generate a whole set at once
+- Upload a portrait and a script, get a talking avatar video with lip-sync
+- Animate any static image into a video clip
+- Generate a video purely from a text description
+- Remove backgrounds, edit images, or swap scenes — all by describing what you want
+- Put your product on a model with one sentence
+- Clone your voice or pick from hundreds of voices for text-to-speech
+- Organize everything on a web board for preview and sharing
+
+**Combined workflows — chain capabilities freely:**
+
+These capabilities can be mixed and matched in any combination. For example, tell the agent "create a full product launch kit from this one photo" and it will chain background removal, product showcase, avatar video, and image generation into one pipeline — all in a single conversation. Other examples:
+
+- Generate images for each scene of a storyboard, then animate them all into video clips
+- Write a script, produce TTS narration in 3 languages, create avatar videos for each
+- Batch-produce a week's worth of brand-consistent social media images and videos from one style reference
+- Upload a portrait + clone your voice, then generate unlimited avatar episodes from text scripts alone
+- Turn an article into a multi-segment educational video series with AI illustrations and presenter narration
 
 ## Execution Rule
 
@@ -206,7 +231,7 @@ What does the user need?
 
 > **Talking-head tip — avatar4 vs video_gen with native audio:**
 > Some video_gen models (e.g. Standard, Kling V3, Veo 3.1) support native audio and can produce talking-head videos with **better visual quality** than avatar4. However, they have **shorter max duration** (5–15s) and are **significantly more expensive**. Avatar4 supports up to 120s per segment at much lower cost.
-> **Rule of thumb:** Default to avatar4 for most talking-head needs. Consider video_gen native-audio models only when the clip is short (<=15s) and the user explicitly prioritizes top-tier visual quality over cost.
+> **Rule of thumb:** Target video duration less than 15s, default to video_gen native-audio models; otherwise, default to avatar4. But you should always ask the user for their preference with pros and cons analysis.
 
 ### Step 3 — Simple vs Complex
 
