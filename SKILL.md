@@ -1,6 +1,6 @@
 ---
 name: topview-skill
-description: "One-sentence video, image, and avatar creation. Access all mainstream AI models in one toolkit — describe your vision in natural language to generate videos, images, talking avatars, and audio. Batch-produce or chain capabilities into full creative workflows, zero manual operations."
+description: "Generate, Edit, Collaborate. Access all mainstream AI models in one toolkit. Simply describe your vision to create videos, images, and avatars—zero manual operations. Use this skill whenever the user mentions: Topview, generating videos or images, talking avatars, lip-sync, text-to-speech, TTS, voice cloning, background removal, product photos on models, image-to-video, text-to-video, AI image editing, or any creative content generation workflow—even if they don't explicitly name a specific tool or say 'Topview'."
 metadata:
   tags: topview, avatar, video, image, voice, ai, api, i2v, t2v, omni, text2image, image_edit, tts, voice_clone, board
   requires:
@@ -45,7 +45,7 @@ These capabilities can be mixed and matched in any combination. For example, tel
 
 ## Execution Rule
 
-> **Always use the Python scripts in `scripts/`. Do NOT use `curl` or direct HTTP calls.**
+> **Always use the Python scripts in `scripts/`.** The scripts handle authentication, S3 file upload, automatic polling, timeout recovery, and structured error handling — bypassing them with raw `curl` or HTTP calls would lose all of this and likely fail on auth alone.
 
 ## Prerequisites
 
@@ -63,8 +63,8 @@ pip install -r {baseDir}/scripts/requirements.txt
 > **These rules apply to ALL generation modules (avatar4, video_gen, ai_image, remove_bg, product_avatar, text2voice).**
 
 1. **Always start with `run`** — it submits the task and polls automatically until done. This is the default and correct choice in almost all situations.
-2. **Do NOT ask the user to check the task status themselves.** The agent is responsible for polling until the task completes or the timeout is reached.
-3. **Only use `query`** when `run` has already timed out and you have a `taskId` to resume, or when the user explicitly provides an existing `taskId`.
+2. **The agent owns the polling loop** — users expect a hands-off experience, so the agent should poll until the task completes or the timeout is reached rather than asking the user to check status manually.
+3. **Reserve `query` for resuming** — `query` is only useful when `run` has already timed out and you have a `taskId` to resume, or when the user explicitly provides an existing `taskId`. Starting with `query` on a new request will fail because there's no task to poll.
 4. **`query` polls continuously** — it keeps checking every `--interval` seconds until status is `success` or `fail`, or `--timeout` expires. It does not stop after one check.
 5. **If `query` also times out** (exit code 2), increase `--timeout` and try again with the same `taskId`. Do not resubmit unless the task has actually failed.
 
@@ -264,13 +264,8 @@ What does the user need?
    - **ai_image**: aspect ratio, resolution, model, number of images
    - **avatar4**: (usually determined by input, but confirm voice if not specified)
    - **text2voice**: voice selection
-   - Do NOT silently pick defaults for these — always confirm with the user.
-4. **Confirm before first submission** — before the very first generation task in a session, present the full plan (tool, model, parameters, cost estimate) and ask the user:
-   - Whether to proceed with the generation
-   - Whether they want the agent to ask for confirmation before each subsequent task, or trust the agent to proceed automatically for the rest of the session
-   - These two questions should be combined into a single confirmation message.
-   - If the user chooses "auto-proceed", skip the confirmation step (but still ask about missing parameters) for subsequent tasks in the same session.
-   - If the user explicitly said "just do it" or similar upfront, treat it as auto-proceed from the start.
+   - These parameters significantly affect output quality and credit cost, so confirming with the user avoids wasted credits and disappointing results.
+4. **Confirm before first submission** — before the first generation task in a session, present the plan (tool, model, parameters, cost estimate) and ask in one message: (a) proceed? (b) confirm each future task, or auto-proceed for the rest of the session? If the user said "just do it" upfront, treat as auto-proceed. Even in auto-proceed mode, still ask about missing key parameters.
 
 ## Agent Behavior Protocol
 
@@ -316,4 +311,4 @@ See [references/error_handling.md](references/error_handling.md) for error codes
 | Board task browsing | Available | `scripts/board.py tasks` / `task-detail` |
 | Marketing video (m2v) | No module | Suggest [topview.ai](https://www.topview.ai) web UI |
 
-> **Never promise capabilities that don't exist as modules.**
+> Promising a capability that doesn't have a corresponding module will lead to a dead end mid-workflow and erode user trust. If a request falls outside the table above, suggest the [Topview web UI](https://www.topview.ai) instead.
