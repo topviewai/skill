@@ -48,12 +48,6 @@ The real power is chaining these capabilities together. Describe a goal and the 
 
 **Your imagination is the only limit** — the examples above are just starting points. You can freely combine image generation, video creation, avatar, voice cloning, background removal, and more into any workflow you can think of. Describe your creative vision in your own words, and the AI will figure out how to make it happen.
 
-## Installation
-
-```bash
-npx skills add topviewai/skill
-```
-
 ## Available Modules
 
 Under the hood, the skill uses these modules. You don't need to call them directly — just describe what you want and the AI agent picks the right tool.
