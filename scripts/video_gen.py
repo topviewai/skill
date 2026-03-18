@@ -477,11 +477,11 @@ def add_common_args(p):
                    help="Text prompt (required for t2v and omni)")
     p.add_argument("--aspect-ratio", default=None,
                    help='Aspect ratio, e.g. "16:9", "9:16", "1:1"')
-    p.add_argument("--resolution", type=int, default=None, choices=[480, 540, 720, 768, 1080, 2160],
+    p.add_argument("--resolution", type=int, default=720, choices=[480, 540, 720, 768, 1080, 2160],
                    help="Resolution (model-dependent): 480, 540, 720, 768, 1080, or 2160")
     p.add_argument("--duration", type=int, default=None,
                    help="Video duration in seconds")
-    p.add_argument("--count", type=int, default=None,
+    p.add_argument("--count", type=int, required=True,
                    help="Number of videos to generate (1-4)")
     p.add_argument("--board-id", default=None,
                    help="Board ID for task organization")
