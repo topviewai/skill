@@ -1,6 +1,6 @@
 ---
 name: topview-skill
-description: "Generate, Edit, Collaborate. Access all mainstream AI models in one toolkit. Simply describe your vision to create videos, images, and avatars—zero manual operations. Use this skill whenever the user mentions: Topview, generating videos or images, talking avatars, lip-sync, text-to-speech, TTS, voice cloning, background removal, product photos on models, image-to-video, text-to-video, AI image editing, or any creative content generation workflow—even if they don't explicitly name a specific tool or say 'Topview'."
+description: "Generate, Edit, Collaborate. Access all mainstream AI models in one toolkit. Simply describe your vision to create videos, images, and avatars—zero manual operations."
 metadata:
   tags: topview, avatar, video, image, voice, ai, api, i2v, t2v, omni, text2image, image_edit, tts, voice_clone, board
   requires:
@@ -18,41 +18,145 @@ metadata:
 - 🗣️ **Describe to Create**: Just tell the agent what you want. From talking avatars to product composites, your prompts generate the exact output.
 - ⚡ **Zero Manual Ops**: No manual uploads, no tedious tweaking. Everything is automated straight to your shared board.
 
-## What You Can Do
-
-> You don't need to know any API details. Just describe what you want — the agent reads the technical docs below and handles everything.
-
-**Single tasks — one sentence, one result:**
-
-- Describe an image and get it generated in seconds — or batch-generate a whole set at once
-- Upload a portrait and a script, get a talking avatar video with lip-sync
-- Animate any static image into a video clip
-- Generate a video purely from a text description
-- Remove backgrounds, edit images, or swap scenes — all by describing what you want
-- Put your product on a model with one sentence
-- Clone your voice or pick from hundreds of voices for text-to-speech
-- Organize everything on a web board for preview and sharing
-
-**Combined workflows — chain capabilities freely:**
-
-These capabilities can be mixed and matched in any combination. For example, tell the agent "create a full product launch kit from this one photo" and it will chain background removal, product showcase, avatar video, and image generation into one pipeline — all in a single conversation. Other examples:
-
-- Generate images for each scene of a storyboard, then animate them all into video clips
-- Write a script, produce TTS narration in 3 languages, create avatar videos for each
-- Batch-produce a week's worth of brand-consistent social media images and videos from one style reference
-- Upload a portrait + clone your voice, then generate unlimited avatar episodes from text scripts alone
-- Turn an article into a multi-segment educational video series with AI illustrations and presenter narration
-
 ## Execution Rule
 
-> **Always use the Python scripts in `scripts/`.** The scripts handle authentication, S3 file upload, automatic polling, timeout recovery, and structured error handling — bypassing them with raw `curl` or HTTP calls would lose all of this and likely fail on auth alone.
+> **Always use the Python scripts in `scripts/`. Do NOT use `curl` or direct HTTP calls.**
+
+## User-Facing Reply Rules
+
+> **⚠️ HIGHEST PRIORITY — every user-facing reply MUST follow ALL rules below.**
+>
+> Most users are non-technical. Many chat from Feishu, WeChat, or similar apps and **cannot** see local browser popups or terminals.
+
+1. **Keep replies short** — give the result or next step directly. If one sentence is enough, don't write three.
+2. **Use plain language** — no API jargon, no terminal references, no mentions of environment variables, polling, JSON, scripts, or "auth flow". Speak as if the user has never seen a command line.
+3. **Never mention terminal details** — do not reference command output, logs, exit codes, file paths, config files, or any technical internals. These mean nothing to the user.
+4. **Never ask the user to operate a browser popup** — the user cannot see the agent's machine screen. When login is needed, the **only** correct action is to send the authorization link directly in the chat.
+5. **Always send the direct login link** — extract `URL: ...` from `auth.py login` output and use the login template below. Never say "browser opened" or similar. **If the URL is not found in the output, re-run `auth.py login` to get a new link. Never skip sending the link.**
+6. **Wait for user confirmation after login** — ask the user to reply "好了" / "done", then continue the task.
+7. **Explain errors simply** — if a task fails, tell the user in one sentence what happened and ask if they want to retry. Never paste error messages or technical details.
+8. **Be result-oriented** — after task completion, give the user the result (link, image, video) directly. Do not describe intermediate steps.
+9. **Always take the user's perspective** — the user can only see the chat conversation, nothing else. Anything requiring user action (links, confirmations) must appear in the chat.
+10. **Do not tell the user to register separately** — the authorization page includes both login and sign-up. New users can register directly on that page. Never say "go to topview.ai to register first".
+11. **Act directly, don't ask which method** — when login is needed, just run `auth.py login` and send the link. Don't ask "which method do you prefer?" or present multiple options. The user asked you to do something — login is just an intermediate step, handle it.
+12. **Give time estimates for generation tasks** — after submitting a task, tell the user the estimated wait time so they know what to expect. Use the estimates from the "Estimated Generation Time" table below.
+
+**Estimated Generation Time**
+
+> Tell the user the estimated wait time after submitting a task. Match the user's language.
+
+| Task Type | Model | Estimated Time |
+|-----------|-------|---------------|
+| Video | Standard / Fast (Seedance 2.0) | ~5–10 min |
+| Video | All other video models (Kling, Sora, Veo, Vidu, etc.) | ~3–5 min |
+| Image | GPT Image 1.5 | ~1 min |
+| Image | All other image models (Nano Banana, Seedream, Imagen, Kontext, Grok, etc.) | ~30s–1 min |
+| Avatar | avatar4 | ~2–5 min (depends on script length) |
+| TTS | text2voice | ~10–30s |
+| Remove BG | remove_bg | ~10–30s |
+| Product Avatar | product_avatar | ~1–2 min |
+
+Example messages after submitting:
+- Chinese: "已经开始生成了，视频大约需要 5-10 分钟，请稍等~"
+- English: "Generation started — the video will take roughly 5–10 minutes. I'll send it to you as soon as it's ready."
+
+**Required login message template**
+
+Replace `<LOGIN_URL>` with the actual link. Follow the user's language (Chinese template for Chinese users, English for English users).
+
+中文模板：
+
+```text
+安装完成，Topview Skill 已连接到你的智能助手。
+
+复制下方链接到浏览器中登录，登录后将解锁以下能力：
+
+<LOGIN_URL>
+
+🎬 视频生成
+文字转视频、图片转视频、参考视频生成，自动配音配乐。
+视频模型：Seedance 2.0 · Sora 2 · Kling 3 · Veo 3.1 · Vidu Q3 · wan2.7
+
+🖼️ AI 图片生成与编辑
+文字生图、AI 修图、风格转换，最高支持 4K。
+图片模型：Nano Banana 2 · Seedream 5.0 · GPT Image 1.5 · Imagen 4 · Kontext-Pro · Grok Image
+
+🧑‍💼 口播数字人
+上传一张照片 + 文案，自动生成真人口播视频，支持多语种。
+
+✂️ 背景移除
+一键抠图，产品图、人像、任意图片秒去背景。
+
+👗 产品模特图
+把你的产品图放到模特身上，自动生成带货展示图。
+
+🎙️ 语音与配音
+文字转语音、声音克隆，支持多语种配音输出。
+
+登录完成后回我一句"好了"，我马上继续。
+```
+
+English template:
+
+```text
+Installation complete. Topview Skill is now connected to your agent.
+
+Copy the link below into your browser to sign in. After signing in, the following capabilities will be unlocked.
+
+<LOGIN_URL>
+
+🎬 Video Generation
+Text-to-video, image-to-video, reference-based generation with auto sound & music.
+Models: Seedance 2.0 · Sora 2 · Kling 3 · Veo 3.1 · Vidu Q3 · wan2.7
+
+🖼️ AI Image Generation & Editing
+Text-to-image, AI retouching, style transfer — up to 4K resolution.
+Models: Nano Banana 2 · Seedream 5.0 · GPT Image 1.5 · Imagen 4 · Kontext-Pro · Grok Image
+
+🧑‍💼 Talking Avatar
+Upload a photo + script to auto-generate presenter-style talking head videos.
+
+✂️ Background Removal
+One-click cutout for product shots, portraits, and any image.
+
+👗 Product Model Shots
+Place your product onto model templates for e-commerce showcase images.
+
+🎙️ Voice & TTS
+Text-to-speech, voice cloning, multilingual dubbing and narration.
+
+Once you've signed in, just reply "done" and I'll continue right away.
+```
+
+**Banned phrases (including any variations):**
+
+- "Browser has opened" / "browser popped up"
+- "Run this in the terminal" / "run the login command"
+- "Check the popup" / "look at the browser"
+- "Set the environment variable"
+- "Command executed successfully"
+- "Polling task status"
+- "Script output is as follows"
+- "Go operate on that computer" / "check the robot's computer"
+- "Authorization page popped up" / "if the page appeared"
+- "Go to topview.ai to register first" — auth page has built-in registration
+- "Which method do you prefer?" / "two options for you" — don't give choices, just act
+- "Auth flow" / "perform authentication" / "complete authentication" — too technical
+- "Python config" / "environment setup" — user doesn't need to know
+- Anything asking the user to operate outside the chat window
+- Anything containing code, commands, or file paths
+
+**Fallback when login URL is not captured:**
+
+> If `auth.py login` output does not contain a `URL:` line (e.g. background execution missed the output), **re-run `auth.py login`** to get a fresh link.
+> **NEVER** fall back to telling the user to "check the browser popup" or "go operate on the agent's computer". The user cannot see it.
 
 ## Prerequisites
 
 - **Python 3.8+**
-- Authenticated — see [references/auth.md](references/auth.md) for login flow
+- Authenticated — see [references/auth.md](references/auth.md) for the direct-link login flow
 - Credits available — see [references/user.md](references/user.md) to check balance
-- Env vars `TOPVIEW_UID` + `TOPVIEW_API_KEY` are set automatically after login; or set manually for CI
+- Env vars `TOPVIEW_UID` + `TOPVIEW_API_KEY` are handled automatically after login; manual setup is only for CI/internal use
 
 ```bash
 pip install -r {baseDir}/scripts/requirements.txt
@@ -63,8 +167,8 @@ pip install -r {baseDir}/scripts/requirements.txt
 > **These rules apply to ALL generation modules (avatar4, video_gen, ai_image, remove_bg, product_avatar, text2voice).**
 
 1. **Always start with `run`** — it submits the task and polls automatically until done. This is the default and correct choice in almost all situations.
-2. **The agent owns the polling loop** — users expect a hands-off experience, so the agent should poll until the task completes or the timeout is reached rather than asking the user to check status manually.
-3. **Reserve `query` for resuming** — `query` is only useful when `run` has already timed out and you have a `taskId` to resume, or when the user explicitly provides an existing `taskId`. Starting with `query` on a new request will fail because there's no task to poll.
+2. **Do NOT ask the user to check the task status themselves.** The agent is responsible for polling until the task completes or the timeout is reached.
+3. **Only use `query`** when `run` has already timed out and you have a `taskId` to resume, or when the user explicitly provides an existing `taskId`.
 4. **`query` polls continuously** — it keeps checking every `--interval` seconds until status is `success` or `fail`, or `--timeout` expires. It does not stop after one check.
 5. **If `query` also times out** (exit code 2), increase `--timeout` and try again with the same `taskId`. Do not resubmit unless the task has actually failed.
 
@@ -108,7 +212,7 @@ Session flow:
 
 | Module | Script | Reference | Description |
 |--------|--------|-----------|-------------|
-| Auth | `scripts/auth.py` | [auth.md](references/auth.md) | OAuth 2.0 Device Flow — browser login, save credentials |
+| Auth | `scripts/auth.py` | [auth.md](references/auth.md) | OAuth 2.0 Device Flow — generate login link, wait for authorization, save credentials |
 | Avatar4 | `scripts/avatar4.py` | [avatar4.md](references/avatar4.md) | Talking avatar videos from a photo; `list-captions` for caption styles |
 | Video Gen | `scripts/video_gen.py` | [video_gen.md](references/video_gen.md) | Image-to-video, text-to-video, omni reference(video generation from reference video, image, audio and text) |
 | AI Image | `scripts/ai_image.py` | [ai_image.md](references/ai_image.md) | Text-to-image and AI image editing (10+ models) |
@@ -231,7 +335,7 @@ What does the user need?
 
 > **Talking-head tip — avatar4 vs video_gen with native audio:**
 > Some video_gen models (e.g. Standard, Kling V3, Veo 3.1) support native audio and can produce talking-head videos with **better visual quality** than avatar4. However, they have **shorter max duration** (5–15s) and are **significantly more expensive**. Avatar4 supports up to 120s per segment at much lower cost.
-> **Rule of thumb:** Target video duration less than 15s, default to video_gen native-audio models; otherwise, default to avatar4. But you should always ask the user for their preference with pros and cons analysis.
+> **Rule of thumb:** Default to avatar4 for most talking-head needs. Consider video_gen native-audio models only when the clip is short (<=15s) and the user explicitly prioritizes top-tier visual quality over cost.
 
 ### Step 3 — Simple vs Complex
 
@@ -264,8 +368,13 @@ What does the user need?
    - **ai_image**: aspect ratio, resolution, model, number of images
    - **avatar4**: (usually determined by input, but confirm voice if not specified)
    - **text2voice**: voice selection
-   - These parameters significantly affect output quality and credit cost, so confirming with the user avoids wasted credits and disappointing results.
-4. **Confirm before first submission** — before the first generation task in a session, present the plan (tool, model, parameters, cost estimate) and ask in one message: (a) proceed? (b) confirm each future task, or auto-proceed for the rest of the session? If the user said "just do it" upfront, treat as auto-proceed. Even in auto-proceed mode, still ask about missing key parameters.
+   - Do NOT silently pick defaults for these — always confirm with the user.
+4. **Confirm before first submission** — before the very first generation task in a session, present the full plan (tool, model, parameters, cost estimate) and ask the user:
+   - Whether to proceed with the generation
+   - Whether they want the agent to ask for confirmation before each subsequent task, or trust the agent to proceed automatically for the rest of the session
+   - These two questions should be combined into a single confirmation message.
+   - If the user chooses "auto-proceed", skip the confirmation step (but still ask about missing parameters) for subsequent tasks in the same session.
+   - If the user explicitly said "just do it" or similar upfront, treat it as auto-proceed from the start.
 
 ## Agent Behavior Protocol
 
@@ -277,10 +386,85 @@ What does the user need?
 
 ### After Execution
 
-1. **Report cost** — tell the user how many credits were consumed (from `costCredit` in response)
-2. **Show results clearly** — provide download URLs, duration, resolution; number multiple outputs
-3. **Show edit link** — if the result includes a `boardTaskId`, show `https://www.topview.ai/board/{boardId}?boardResultId={boardTaskId}` and tell the user they can view/edit there
-4. **Offer iteration** — if the result isn't satisfactory, suggest adjustments; remind that regenerating consumes additional credits
+> **Use the structured result templates below.** The user should see the output link first, then the board link, then key metadata. Keep it clean and scannable.
+
+**Video result template:**
+
+```text
+🎬 视频已生成完成
+
+视频地址：<VIDEO_URL>
+• 时长：<DURATION>
+• 画幅：<ASPECT_RATIO>
+• 模型：<MODEL_NAME>
+• 消耗：<COST> credits
+
+🔗 项目链接
+https://www.topview.ai/board/<BOARD_ID>?boardResultId=<BOARD_TASK_ID>
+可在项目中查看、编辑和下载。
+
+不满意的话可以告诉我，我帮你调整后重新生成。
+```
+
+**Image result template:**
+
+```text
+🖼️ 图片已生成完成
+
+图片地址：<IMAGE_URL>
+• 分辨率：<RESOLUTION>
+• 模型：<MODEL_NAME>
+• 消耗：<COST> credits
+
+🔗 项目链接
+https://www.topview.ai/board/<BOARD_ID>?boardResultId=<BOARD_TASK_ID>
+可在项目中查看、编辑和下载。
+
+不满意的话可以告诉我，我帮你调整后重新生成。
+```
+
+**English video result template:**
+
+```text
+🎬 Video generated
+
+Video: <VIDEO_URL>
+• Duration: <DURATION>
+• Aspect ratio: <ASPECT_RATIO>
+• Model: <MODEL_NAME>
+• Cost: <COST> credits
+
+🔗 Project link
+https://www.topview.ai/board/<BOARD_ID>?boardResultId=<BOARD_TASK_ID>
+View, edit, and download in the project.
+
+Not happy with the result? Let me know and I'll adjust and regenerate.
+```
+
+**English image result template:**
+
+```text
+🖼️ Image generated
+
+Image: <IMAGE_URL>
+• Resolution: <RESOLUTION>
+• Model: <MODEL_NAME>
+• Cost: <COST> credits
+
+🔗 Project link
+https://www.topview.ai/board/<BOARD_ID>?boardResultId=<BOARD_TASK_ID>
+View, edit, and download in the project.
+
+Not happy with the result? Let me know and I'll adjust and regenerate.
+```
+
+**Rules:**
+1. **Result link first** — always show the video/image URL at the very top.
+2. **Board link second** — if `boardTaskId` is available, show the board edit link.
+3. **Key metadata only** — duration, aspect ratio/resolution, model, cost. Don't dump raw JSON or extra fields.
+4. **Offer iteration** — end with a short note that the user can ask for adjustments. Remind that regeneration costs additional credits.
+5. **Multiple outputs** — if the task produced multiple results, number them (1, 2, 3…) each with its own link and metadata.
+6. **Match user language** — use the Chinese template for Chinese users, English for English users.
 
 ### Error Handling
 
@@ -311,4 +495,4 @@ See [references/error_handling.md](references/error_handling.md) for error codes
 | Board task browsing | Available | `scripts/board.py tasks` / `task-detail` |
 | Marketing video (m2v) | No module | Suggest [topview.ai](https://www.topview.ai) web UI |
 
-> Promising a capability that doesn't have a corresponding module will lead to a dead end mid-workflow and erode user trust. If a request falls outside the table above, suggest the [Topview web UI](https://www.topview.ai) instead.
+> **Never promise capabilities that don't exist as modules.**
