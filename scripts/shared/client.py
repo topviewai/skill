@@ -81,9 +81,7 @@ class TopviewClient:
 
     def post(self, path: str, json: Optional[dict] = None, **kwargs) -> dict:
         url = f"{BASE_URL}{path}" if path.startswith("/") else path
-        print(f"post url: {url}")
         resp = requests.post(url, headers=self.headers, json=json, **kwargs)
-        print(f"post resp: {resp.text}")
         resp.raise_for_status()
         return self._check(resp.json())
 
@@ -98,6 +96,28 @@ class TopviewClient:
         resp = requests.delete(url, headers=self.headers, params=params, **kwargs)
         resp.raise_for_status()
         return self._check(resp.json())
+
+    def shorten_url(self, long_url: str) -> str:
+        """Convert a long URL to a short URL via the Topview short-URL API.
+
+        Returns the short URL on success, or the original URL on any failure.
+        """
+        try:
+            result = self.post("/v1/short_url/generate", json={"longUrl": long_url})
+            short = result.get("shortUrl", "")
+            return short if short else long_url
+        except Exception:
+            return long_url
+
+    def shorten_urls_in_data(self, data: Any) -> Any:
+        """Recursively traverse data and shorten any long URL strings."""
+        if isinstance(data, dict):
+            return {k: self.shorten_urls_in_data(v) for k, v in data.items()}
+        if isinstance(data, list):
+            return [self.shorten_urls_in_data(item) for item in data]
+        if isinstance(data, str) and data.startswith("http") and len(data) > 120:
+            return self.shorten_url(data)
+        return data
 
     def put_file(self, upload_url: str, file_path: str) -> None:
         """PUT a local file to a pre-signed S3 URL (no auth headers)."""
@@ -127,7 +147,7 @@ class TopviewClient:
                 )
 
             result = self.get(path, params={"taskId": task_id})
-            status = result.get("status", "")
+            status = str(result.get("status", "")).lower()
 
             if verbose:
                 print(
