@@ -212,7 +212,7 @@ def cmd_tasks(args, parser):
     result = client.get(BOARD_TASKS_PATH, params=params)
 
     if args.json:
-        print(json_mod.dumps(result, indent=2, ensure_ascii=False))
+        print(json_mod.dumps(client.shorten_urls_in_data(result), indent=2, ensure_ascii=False))
         return
 
     tasks = result.get("list", [])
@@ -231,6 +231,8 @@ def cmd_tasks(args, parser):
         created = t.get("gmtCreate", "")
         res = t.get("result", {})
         url = res.get("videoUrl") or res.get("imageUrl") or ""
+        if url:
+            url = client.shorten_url(url)
         print(f"{tid}\t{btid}\t{status}\t{tool}\t{media}\t{cost}cr\t{created}\t{url}")
 
 
@@ -238,7 +240,7 @@ def cmd_tasks(args, parser):
 # task-detail
 # ---------------------------------------------------------------------------
 
-def _print_task_detail(result: dict) -> None:
+def _print_task_detail(result: dict, client: TopviewClient) -> None:
     """Format and print a single task result."""
     tid = result.get("taskId", "")
     btid = result.get("boardTaskId", "")
@@ -263,6 +265,7 @@ def _print_task_detail(result: dict) -> None:
     if error_msg:
         print(f"  error:       {error_msg}")
     if res:
+        res = client.shorten_urls_in_data(res)
         for k, v in res.items():
             print(f"  {k}: {v}")
     if btid and bid:
@@ -303,9 +306,9 @@ def cmd_task_detail(args, parser):
         time.sleep(interval)
 
     if args.json:
-        print(json_mod.dumps(result, indent=2, ensure_ascii=False))
+        print(json_mod.dumps(client.shorten_urls_in_data(result), indent=2, ensure_ascii=False))
     else:
-        _print_task_detail(result)
+        _print_task_detail(result, client)
 
     if status not in TERMINAL_STATUSES:
         if not args.quiet:

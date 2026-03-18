@@ -145,10 +145,10 @@ def download_file(url: str, output: str, quiet: bool) -> None:
         print(f"Downloaded: {output} ({size_kb:.1f} KB)", file=sys.stderr)
 
 
-def print_result(result: dict, args) -> None:
+def print_result(result: dict, args, client: TopviewClient) -> None:
     """Print final result."""
     if args.json:
-        print(json_mod.dumps(result, indent=2, ensure_ascii=False))
+        print(json_mod.dumps(client.shorten_urls_in_data(result), indent=2, ensure_ascii=False))
     else:
         status = result.get("status", "unknown")
         cost = result.get("costCredit", FIXED_COST)
@@ -156,13 +156,16 @@ def print_result(result: dict, args) -> None:
 
         result_url = result.get("finishedVideoUrl") or result.get("resultImageUrl") or ""
         if result_url:
-            print(f"  result: {result_url}")
+            print(f"  result: {client.shorten_url(result_url)}")
             if args.output and result_url:
                 download_file(result_url, args.output, args.quiet)
-    board_task_id = result.get("boardTaskId", "")
+    board_task_id = result.get("boardTaskId", "") or ""
     board_id = result.get("boardId", "") or getattr(args, "board_id", "") or ""
     if board_task_id and board_id:
         print(f"  edit: https://www.topview.ai/board/{board_id}?boardResultId={board_task_id}")
+    elif not board_task_id and board_id:
+        print(f"  [debug] boardTaskId not found, full result:", file=sys.stderr)
+        print(json_mod.dumps(result, indent=2, ensure_ascii=False), file=sys.stderr)
 
 
 # ---------------------------------------------------------------------------
@@ -229,7 +232,7 @@ def cmd_run(args, parser):
     body = build_body(args, client)
     task_id = do_submit(client, body, args.quiet)
     result = do_poll(client, task_id, args.timeout, args.interval, args.quiet)
-    print_result(result, args)
+    print_result(result, args, client)
 
 
 def cmd_submit(args, parser):
@@ -247,7 +250,7 @@ def cmd_query(args, parser):
         result = do_poll(
             client, args.task_id, args.timeout, args.interval, args.quiet,
         )
-        print_result(result, args)
+        print_result(result, args, client)
     except TimeoutError as e:
         if not args.quiet:
             print(f"Timeout reached: {e}", file=sys.stderr)

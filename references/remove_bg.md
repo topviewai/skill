@@ -74,7 +74,7 @@ python {baseDir}/scripts/remove_bg.py query --task-id <taskId> --timeout 600
 | Option | Description |
 |--------|-------------|
 | `--output FILE` | Download result image to this local path |
-| `--json` | Output full JSON response |
+| `--json` | Output full JSON response (not used by default; only when the user explicitly requests raw JSON output) |
 | `-q, --quiet` | Suppress status messages on stderr |
 
 ## Output Fields

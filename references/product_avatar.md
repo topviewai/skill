@@ -159,7 +159,7 @@ python {baseDir}/scripts/product_avatar.py run \
 | `--timeout SECS` | Max polling time (default: 600) |
 | `--interval SECS` | Polling interval (default: 5) |
 | `--output FILE` | Download result to local path |
-| `--json` | Full JSON response |
+| `--json` | Full JSON response (not used by default; only when the user explicitly requests raw JSON output) |
 | `-q, --quiet` | Suppress status messages |
 
 ## Mode Comparison

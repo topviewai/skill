@@ -56,7 +56,7 @@ python {baseDir}/scripts/user.py logs \
 
 | Option | Description |
 |--------|-------------|
-| `--json` | Output full JSON response |
+| `--json` | Output full JSON response (not used by default; only when the user explicitly requests raw JSON output) |
 | `-q, --quiet` | Suppress status messages |
 
 ### `logs`

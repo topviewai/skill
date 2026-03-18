@@ -168,7 +168,7 @@ Task: task_abc123
 
 | Option | Description |
 |--------|-------------|
-| `--json` | Full JSON response |
+| `--json` | Full JSON response (not used by default; only when the user explicitly requests raw JSON output) |
 | `-q, --quiet` | Suppress status messages |
 
 ## Board Web URL

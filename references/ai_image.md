@@ -112,7 +112,7 @@ python {baseDir}/scripts/ai_image.py run \
 | `--timeout` | Max polling time (default: 300) |
 | `--interval` | Polling interval (default: 3) |
 | `--output-dir` | Download results to directory |
-| `--json` | Full JSON response |
+| `--json` | Full JSON response (not used by default; only when the user explicitly requests raw JSON output) |
 | `-q, --quiet` | Suppress status messages |
 
 ## Model Recommendation

@@ -427,35 +427,40 @@ def download_video(url: str, output: str, quiet: bool) -> None:
         print(f"Downloaded: {output} ({size_mb:.1f} MB)", file=sys.stderr)
 
 
-def print_result(result: dict, args) -> None:
+def print_result(result: dict, args, client: TopviewClient) -> None:
     """Print final result: video URLs by default, full JSON with --json."""
     videos = result.get("videos", [])
 
     if args.output_dir and videos:
         os.makedirs(args.output_dir, exist_ok=True)
         for i, v in enumerate(videos):
-            if v.get("status") == "success" and v.get("filePath"):
+            if str(v.get("status", "")).lower() == "success" and v.get("filePath"):
                 ext = "mp4"
                 out_path = os.path.join(args.output_dir, f"video_{i+1}.{ext}")
                 download_video(v["filePath"], out_path, args.quiet)
 
     if args.json:
-        print(json_mod.dumps(result, indent=2, ensure_ascii=False))
+        print(json_mod.dumps(client.shorten_urls_in_data(result), indent=2, ensure_ascii=False))
     else:
         cost = result.get("costCredit", "N/A")
+        board_id = result.get("boardId", "") or getattr(args, "board_id", "") or ""
         print(f"status: {result.get('status')}  cost: {cost} credits")
+        any_board_task = False
         for i, v in enumerate(videos):
-            status = v.get("status", "unknown")
+            status = str(v.get("status", "unknown"))
             url = v.get("filePath", "")
             err = v.get("errorMsg", "")
-            if status == "success":
-                print(f"  [{i+1}] {url}")
+            if status.lower() == "success":
+                print(f"  [{i+1}] {client.shorten_url(url)}")
             else:
                 print(f"  [{i+1}] {status}: {err}")
-    board_task_id = result.get("boardTaskId", "")
-    board_id = result.get("boardId", "") or getattr(args, "board_id", "") or ""
-    if board_task_id and board_id:
-        print(f"  edit: https://www.topview.ai/board/{board_id}?boardResultId={board_task_id}")
+            btid = v.get("boardTaskId")
+            if btid and board_id:
+                any_board_task = True
+                print(f"       edit: https://www.topview.ai/board/{board_id}?boardResultId={btid}")
+        if not any_board_task and board_id:
+            print(f"  [debug] boardTaskId not found, full result:", file=sys.stderr)
+            print(json_mod.dumps(result, indent=2, ensure_ascii=False), file=sys.stderr)
 
 
 # ---------------------------------------------------------------------------
@@ -596,7 +601,7 @@ def cmd_run(args, parser):
     body = build_body(args, client)
     task_id = do_submit(client, args.type, body, args.quiet)
     result = do_poll(client, args.type, task_id, args.timeout, args.interval, args.quiet)
-    print_result(result, args)
+    print_result(result, args, client)
 
 
 def cmd_submit(args, parser):
@@ -616,7 +621,7 @@ def cmd_query(args, parser):
             client, args.type, args.task_id,
             args.timeout, args.interval, args.quiet,
         )
-        print_result(result, args)
+        print_result(result, args, client)
     except TimeoutError as e:
         if not args.quiet:
             print(f"Timeout reached: {e}", file=sys.stderr)

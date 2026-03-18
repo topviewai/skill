@@ -97,9 +97,9 @@ def download_file(url: str, output: str, quiet: bool) -> None:
         print(f"Downloaded: {output} ({size_kb:.1f} KB)", file=sys.stderr)
 
 
-def print_result(result: dict, args) -> None:
+def print_result(result: dict, args, client: TopviewClient) -> None:
     if args.json:
-        print(json_mod.dumps(result, indent=2, ensure_ascii=False))
+        print(json_mod.dumps(client.shorten_urls_in_data(result), indent=2, ensure_ascii=False))
         return
 
     status = result.get("status", "unknown")
@@ -113,7 +113,7 @@ def print_result(result: dict, args) -> None:
     if file_id:
         print(f"  bgRemovedImageFileId: {file_id}")
     if image_url:
-        print(f"  bgRemovedImagePath:   {image_url}")
+        print(f"  bgRemovedImagePath:   {client.shorten_url(image_url)}")
         if args.output:
             download_file(image_url, args.output, args.quiet)
     if w and h:
@@ -124,7 +124,7 @@ def print_result(result: dict, args) -> None:
     if mask_id:
         print(f"  maskImageFileId:      {mask_id}")
     if mask_url:
-        print(f"  maskImagePath:        {mask_url}")
+        print(f"  maskImagePath:        {client.shorten_url(mask_url)}")
 
 
 # ---------------------------------------------------------------------------
@@ -165,7 +165,7 @@ def cmd_run(args, parser):
     body = build_body(args, file_id)
     task_id = do_submit(client, body, args.quiet)
     result = do_poll(client, task_id, args.timeout, args.interval, args.quiet)
-    print_result(result, args)
+    print_result(result, args, client)
 
 
 def cmd_submit(args, parser):
@@ -184,7 +184,7 @@ def cmd_query(args, parser):
         result = do_poll(
             client, args.task_id, args.timeout, args.interval, args.quiet,
         )
-        print_result(result, args)
+        print_result(result, args, client)
     except TimeoutError as e:
         if not args.quiet:
             print(f"Timeout reached: {e}", file=sys.stderr)

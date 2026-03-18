@@ -80,7 +80,7 @@ def cmd_list(args, parser):
     result = client.get(VOICE_QUERY_PATH, params=params)
 
     if args.json:
-        print(json_mod.dumps(result, indent=2, ensure_ascii=False))
+        print(json_mod.dumps(client.shorten_urls_in_data(result), indent=2, ensure_ascii=False))
         return
 
     total = result.get("total", 0)
@@ -99,6 +99,8 @@ def cmd_list(args, parser):
         style = v.get("style", "")
         accent = v.get("accent", "")
         demo = v.get("demoAudioUrl", "")
+        if demo:
+            demo = client.shorten_url(demo)
         print(f"{vid}\t{name}\t{lang}\t{gender}\t{age}\t{style}\t{accent}\t{demo}")
 
 
@@ -151,10 +153,10 @@ def do_clone_poll(client: TopviewClient, task_id: str, timeout: float,
     )
 
 
-def print_clone_result(result: dict, args) -> None:
+def print_clone_result(result: dict, args, client: TopviewClient) -> None:
     """Print voice clone result."""
     if args.json:
-        print(json_mod.dumps(result, indent=2, ensure_ascii=False))
+        print(json_mod.dumps(client.shorten_urls_in_data(result), indent=2, ensure_ascii=False))
         return
 
     status = result.get("status", "unknown")
@@ -167,7 +169,7 @@ def print_clone_result(result: dict, args) -> None:
     print(f"  voiceId:   {voice_id}")
     print(f"  voiceName: {voice_name}")
     if demo_url:
-        print(f"  demoAudio: {demo_url}")
+        print(f"  demoAudio: {client.shorten_url(demo_url)}")
 
 
 def cmd_clone(args, parser):
@@ -176,7 +178,7 @@ def cmd_clone(args, parser):
     body = build_clone_body(args, client)
     task_id = do_clone_submit(client, body, args.quiet)
     result = do_clone_poll(client, task_id, args.timeout, args.interval, args.quiet)
-    print_clone_result(result, args)
+    print_clone_result(result, args, client)
 
 
 def cmd_clone_submit(args, parser):
@@ -194,7 +196,7 @@ def cmd_clone_query(args, parser):
         result = do_clone_poll(
             client, args.task_id, args.timeout, args.interval, args.quiet,
         )
-        print_clone_result(result, args)
+        print_clone_result(result, args, client)
     except TimeoutError as e:
         if not args.quiet:
             print(f"Timeout reached: {e}", file=sys.stderr)

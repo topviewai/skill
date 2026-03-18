@@ -292,39 +292,44 @@ def download_image(url: str, output: str, quiet: bool) -> None:
         print(f"Downloaded: {output} ({size_kb:.1f} KB)", file=sys.stderr)
 
 
-def print_result(result: dict, args) -> None:
+def print_result(result: dict, args, client: TopviewClient) -> None:
     """Print final result: image URLs by default, full JSON with --json."""
     images = result.get("images", [])
 
     if args.output_dir and images:
         os.makedirs(args.output_dir, exist_ok=True)
         for i, img in enumerate(images):
-            if img.get("status") == "success" and img.get("filePath"):
+            if str(img.get("status", "")).lower() == "success" and img.get("filePath"):
                 url = img["filePath"]
                 ext = url.rsplit(".", 1)[-1].split("?")[0] if "." in url else "jpg"
                 out_path = os.path.join(args.output_dir, f"image_{i+1}.{ext}")
                 download_image(url, out_path, args.quiet)
 
     if args.json:
-        print(json_mod.dumps(result, indent=2, ensure_ascii=False))
+        print(json_mod.dumps(client.shorten_urls_in_data(result), indent=2, ensure_ascii=False))
     else:
         cost = result.get("costCredit", "N/A")
+        board_id = result.get("boardId", "") or getattr(args, "board_id", "") or ""
         print(f"status: {result.get('status')}  cost: {cost} credits")
+        any_board_task = False
         for i, img in enumerate(images):
-            status = img.get("status", "unknown")
+            status = str(img.get("status", "unknown"))
             url = img.get("filePath", "")
             err = img.get("errorMsg", "")
-            if status == "success":
+            if status.lower() == "success":
                 dims = ""
                 if img.get("width") and img.get("height"):
                     dims = f" ({img['width']}x{img['height']})"
-                print(f"  [{i+1}] {url}{dims}")
+                print(f"  [{i+1}] {client.shorten_url(url)}{dims}")
             else:
                 print(f"  [{i+1}] {status}: {err}")
-    board_task_id = result.get("boardTaskId", "")
-    board_id = result.get("boardId", "") or getattr(args, "board_id", "") or ""
-    if board_task_id and board_id:
-        print(f"  edit: https://www.topview.ai/board/{board_id}?boardResultId={board_task_id}")
+            btid = img.get("boardTaskId")
+            if btid and board_id:
+                any_board_task = True
+                print(f"       edit: https://www.topview.ai/board/{board_id}?boardResultId={btid}")
+        if not any_board_task and board_id:
+            print(f"  [debug] boardTaskId not found, full result:", file=sys.stderr)
+            print(json_mod.dumps(result, indent=2, ensure_ascii=False), file=sys.stderr)
 
 
 # ---------------------------------------------------------------------------
@@ -444,7 +449,7 @@ def cmd_run(args, parser):
     body = build_body(args, client)
     task_id = do_submit(client, args.type, body, args.quiet)
     result = do_poll(client, args.type, task_id, args.timeout, args.interval, args.quiet)
-    print_result(result, args)
+    print_result(result, args, client)
 
 
 def cmd_submit(args, parser):
@@ -464,7 +469,7 @@ def cmd_query(args, parser):
             client, args.type, args.task_id,
             args.timeout, args.interval, args.quiet,
         )
-        print_result(result, args)
+        print_result(result, args, client)
     except TimeoutError as e:
         if not args.quiet:
             print(f"Timeout reached: {e}", file=sys.stderr)

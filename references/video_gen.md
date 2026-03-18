@@ -117,7 +117,7 @@ python {baseDir}/scripts/video_gen.py query \
 | `--timeout` | Max polling time (default: 600) |
 | `--interval` | Polling interval (default: 5) |
 | `--output-dir` | Download result videos to directory |
-| `--json` | Output full JSON response |
+| `--json` | Output full JSON response (not used by default; only when the user explicitly requests raw JSON output) |
 | `-q, --quiet` | Suppress status messages |
 
 ### i2v only

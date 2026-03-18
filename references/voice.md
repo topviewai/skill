@@ -141,7 +141,7 @@ python {baseDir}/scripts/voice.py delete --voice-id <voiceId>
 |--------|-------------|
 | `--timeout SECS` | Max polling time (default: 300) |
 | `--interval SECS` | Polling interval (default: 5) |
-| `--json` | Full JSON response |
+| `--json` | Full JSON response (not used by default; only when the user explicitly requests raw JSON output) |
 | `-q, --quiet` | Suppress status messages |
 
 ## Voice Clone Audio Requirements

@@ -93,7 +93,7 @@ python {baseDir}/scripts/text2voice.py query --task-id "$T2"
 | `--timeout SECS` | Max polling time (default: 300) |
 | `--interval SECS` | Polling interval (default: 3) |
 | `--output FILE` | Download audio to local path |
-| `--json` | Full JSON response |
+| `--json` | Full JSON response (not used by default; only when the user explicitly requests raw JSON output) |
 | `-q, --quiet` | Suppress status messages |
 
 ## Cost

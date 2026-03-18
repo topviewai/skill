@@ -119,7 +119,7 @@ def download_audio(url: str, output: str, quiet: bool) -> None:
         print(f"Downloaded: {output} ({size_kb:.1f} KB)", file=sys.stderr)
 
 
-def print_result(result: dict, args) -> None:
+def print_result(result: dict, args, client: TopviewClient) -> None:
     """Print final result: audio URL by default, full JSON with --json."""
     voice = result.get("voice", {})
     audio_url = voice.get("demoAudioUrl", "")
@@ -128,17 +128,20 @@ def print_result(result: dict, args) -> None:
         download_audio(audio_url, args.output, args.quiet)
 
     if args.json:
-        print(json_mod.dumps(result, indent=2, ensure_ascii=False))
+        print(json_mod.dumps(client.shorten_urls_in_data(result), indent=2, ensure_ascii=False))
     else:
         cost = result.get("costCredit", FIXED_COST)
         duration = voice.get("durations", "N/A")
         print(f"status: {result.get('status')}  cost: {cost} credits  duration: {duration}s")
         if audio_url:
-            print(f"  audio: {audio_url}")
-    board_task_id = result.get("boardTaskId", "")
+            print(f"  audio: {client.shorten_url(audio_url)}")
+    board_task_id = result.get("boardTaskId", "") or ""
     board_id = result.get("boardId", "") or getattr(args, "board_id", "") or ""
     if board_task_id and board_id:
         print(f"  edit: https://www.topview.ai/board/{board_id}?boardResultId={board_task_id}")
+    elif not board_task_id and board_id:
+        print(f"  [debug] boardTaskId not found, full result:", file=sys.stderr)
+        print(json_mod.dumps(result, indent=2, ensure_ascii=False), file=sys.stderr)
 
 
 # ---------------------------------------------------------------------------
@@ -195,7 +198,7 @@ def cmd_run(args, parser):
     body = build_body(args, client)
     task_id = do_submit(client, body, args.quiet)
     result = do_poll(client, task_id, args.timeout, args.interval, args.quiet)
-    print_result(result, args)
+    print_result(result, args, client)
 
 
 def cmd_submit(args, parser):
@@ -213,7 +216,7 @@ def cmd_query(args, parser):
         result = do_poll(
             client, args.task_id, args.timeout, args.interval, args.quiet,
         )
-        print_result(result, args)
+        print_result(result, args, client)
     except TimeoutError as e:
         if not args.quiet:
             print(f"Timeout reached: {e}", file=sys.stderr)
