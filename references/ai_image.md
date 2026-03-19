@@ -108,7 +108,7 @@ python {baseDir}/scripts/ai_image.py run \
 | `--resolution` | `"512p"`, `"1K"`, `"2K"`, `"4K"` — model-dependent |
 | `--count` | Number of images (1-4, default: 1) |
 | `--board-id` | Board ID |
-| `--input-images` | Reference image fileIds/local paths (image_edit only) |
+| `--input-images` | Reference image fileIds or local paths, space-separated (image_edit only). E.g. `--input-images photo.jpg` or `--input-images style.jpg content.jpg` |
 | `--timeout` | Max polling time (default: 300) |
 | `--interval` | Polling interval (default: 3) |
 | `--output-dir` | Download results to directory |

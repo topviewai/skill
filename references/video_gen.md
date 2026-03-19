@@ -124,16 +124,16 @@ python {baseDir}/scripts/video_gen.py query \
 
 | Option | Description |
 |--------|-------------|
-| `--first-frame` | First frame image fileId or local path |
-| `--end-frame` | End frame image fileId or local path |
-| `--ref-images` | Reference image fileIds/paths (multi-ref, >=2) |
+| `--first-frame` | First frame image: fileId or local path. E.g. `--first-frame abc123` or `--first-frame photo.png` |
+| `--end-frame` | End frame image: fileId or local path. E.g. `--end-frame def456` or `--end-frame end.jpg` |
+| `--ref-images` | Reference images (multi-ref, >=2): space-separated fileIds or local paths. E.g. `--ref-images img1.png img2.png` |
 
 ### omni only
 
 | Option | Description |
 |--------|-------------|
-| `--input-images` | JSON array: `[{"fileId":"...","name":"Image1"}]` |
-| `--input-videos` | JSON array: `[{"fileId":"...","name":"Video1"}]` |
+| `--input-images` | JSON array of input images. Each item has `fileId` (fileId or local path, auto-uploaded) and `name` (referenced in prompt as `<<<Name>>>`). E.g. `--input-images '[{"fileId":"abc123","name":"Image1"}]'` or with local file: `--input-images '[{"fileId":"/path/to/photo.jpg","name":"Image1"}]'` |
+| `--input-videos` | JSON array of input videos. Same format as `--input-images`. E.g. `--input-videos '[{"fileId":"vid123","name":"Video1"}]'` |
 | `--internet-search` | Enable internet search (Standard/Fast only) |
 
 ## Native Audio (`--sound`)
