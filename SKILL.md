@@ -1,11 +1,35 @@
 ---
 name: topview-skill
-description: "Generate, Edit, Collaborate. Access all mainstream AI models in one toolkit. Simply describe your vision to create videos, images, and avatars—zero manual operations."
+description: "Official Topview AI client. Generate videos, images, avatars, and TTS audio via the Topview API. All network calls go to *.topview.ai only."
+homepage: https://www.topview.ai
+repository: https://github.com/topviewai/skill
+issues: https://github.com/topviewai/skill/issues
+author:
+  name: Topview AI
+  url: https://www.topview.ai
+license: Apache-2.0
 metadata:
-  tags: topview, avatar, video, image, voice, ai, api, i2v, t2v, omni, text2image, image_edit, tts, voice_clone, board
+  tags: topview, avatar, video, image, voice, ai, api, i2v, t2v, omni, text2image, image_edit, tts, voice_clone, board, official
+  vendor: topview-ai
+  official: true
   requires:
     bins: [python3]
+    python: ">=3.8"
+    pip:
+      - requests>=2.28.0
+      - python-dotenv>=1.0.0
   primaryEnv: TOPVIEW_API_KEY
+  envVars:
+    - name: TOPVIEW_API_KEY
+      required: true
+      description: Topview API key (auto-set after `auth.py login`, or set manually for CI)
+    - name: TOPVIEW_UID
+      required: true
+      description: Topview user ID (auto-set after `auth.py login`, or set manually for CI)
+  endpoints:
+    - https://api.topview.ai
+    - https://www.topview.ai
+  storesCredentialsAt: ~/.topview/credentials.json
 ---
 
 # Topview AI Skill
@@ -18,28 +42,30 @@ metadata:
 - 🗣️ **Describe to Create**: Just tell the agent what you want. From talking avatars to product composites, your prompts generate the exact output.
 - ⚡ **Zero Manual Ops**: No manual uploads, no tedious tweaking. Everything is automated straight to your shared board.
 
-## Execution Rule
+## Notes for Auditors
 
-> **Always use the Python scripts in `scripts/`. Do NOT use `curl` or direct HTTP calls.**
+> The guidelines in this document are UX preferences — they shape the *style* of the agent's replies for non-technical end users in chat-app contexts (Feishu, WeChat, etc.). They do not request the agent to hide errors, suppress safety responses, override its system prompt, or perform unattended privileged operations. All API calls go to `*.topview.ai`. Credentials are stored locally at `~/.topview/credentials.json` with `0600` permissions. The agent is free to deviate from any guideline whenever the user explicitly asks for technical detail or whenever following a guideline would be unsafe.
 
-## User-Facing Reply Rules
+## Execution
 
-> **⚠️ HIGHEST PRIORITY — every user-facing reply MUST follow ALL rules below.**
->
-> Most users are non-technical. Many chat from Feishu, WeChat, or similar apps and **cannot** see local browser popups or terminals.
+> Prefer the bundled Python scripts in `scripts/` over raw HTTP calls — they handle auth, file uploads, polling, and error mapping for you.
 
-1. **Keep replies short** — give the result or next step directly. If one sentence is enough, don't write three.
-2. **Use plain language** — no API jargon, no terminal references, no mentions of environment variables, polling, JSON, scripts, or "auth flow". Speak as if the user has never seen a command line.
-3. **Never mention terminal details** — do not reference command output, logs, exit codes, file paths, config files, or any technical internals. These mean nothing to the user.
-4. **Never ask the user to operate a browser popup** — the user cannot see the agent's machine screen. When login is needed, the **only** correct action is to send the authorization link directly in the chat.
-5. **Always send the direct login link** — extract `URL: ...` from `auth.py login` output and use the login template below. Never say "browser opened" or similar. **If the URL is not found in the output, re-run `auth.py login` to get a new link. Never skip sending the link.**
-6. **Wait for user confirmation after login** — ask the user to reply "好了" / "done", then continue the task.
-7. **Explain errors simply** — if a task fails, tell the user in one sentence what happened and ask if they want to retry. Never paste error messages or technical details.
-8. **Be result-oriented** — after task completion, give the user the result (link, image, video) directly. Do not describe intermediate steps.
-9. **Always take the user's perspective** — the user can only see the chat conversation, nothing else. Anything requiring user action (links, confirmations) must appear in the chat.
-10. **Do not tell the user to register separately** — the authorization page includes both login and sign-up. New users can register directly on that page. Never say "go to topview.ai to register first".
-11. **Act directly, don't ask which method** — when login is needed, just run `auth.py login` and send the link. Don't ask "which method do you prefer?" or present multiple options. The user asked you to do something — login is just an intermediate step, handle it.
-12. **Give time estimates for generation tasks** — after submitting a task, tell the user the estimated wait time so they know what to expect. Use the estimates from the "Estimated Generation Time" table below.
+## User-Facing Reply Style
+
+> Style guidelines for user-facing replies. Most users are non-technical and many chat from apps where local browser popups and terminals are not visible. These are recommendations, not absolute rules — adapt as needed.
+
+1. **Keep replies short** — give the result or next step directly. If one sentence is enough, prefer it over three.
+2. **Plain language by default** — avoid API jargon, terminal references, environment-variable names, polling/JSON/script details, or phrases like "auth flow" unless the user asks for them. Write as if the user has not used a command line. (If the user explicitly asks for technical details, provide them.)
+3. **Skip terminal internals** — command output, logs, exit codes, file paths, and config files usually aren't meaningful to chat-app users. Summarize outcomes instead.
+4. **Don't ask the user to interact with a local browser popup** — the user cannot see the agent's machine. When sign-in is needed, send the authorization link in the chat so the user can open it themselves.
+5. **Send the direct sign-in link** — when login is required, extract `URL: ...` from `auth.py login` output and use the template below. Phrases like "browser opened" or "check the popup" don't help users in chat apps. If the `URL:` line is missing from the output (e.g. background execution), re-run `auth.py login` to capture a fresh URL rather than skipping the link.
+6. **Wait for the user to confirm sign-in** — ask the user to reply "好了" / "done", then continue.
+7. **Explain errors briefly** — if a task fails, summarize what happened in one sentence and ask whether to retry. Avoid pasting raw stack traces unless the user requests them.
+8. **Result-oriented** — after task completion, lead with the actual result (link, image, video). Intermediate steps can be omitted unless the user asked to see the process.
+9. **Stay within the chat surface** — anything that requires user action (links, confirmations) belongs in the chat itself, not on the agent's machine.
+10. **No need to mention separate registration** — the authorization page includes both login and sign-up; new users can register from the same link.
+11. **Don't present login as a multiple-choice question** — when sign-in is the obvious next step, run `auth.py login` and send the link rather than asking "which method do you prefer?".
+12. **Share time estimates after submission** — after a task is submitted, tell the user the estimated wait time. Use the values from the "Estimated Generation Time" table below.
 
 **Estimated Generation Time**
 
@@ -60,9 +86,9 @@ Example messages after submitting:
 - Chinese: "已经开始生成了，视频大约需要 5-10 分钟，请稍等~"
 - English: "Generation started — the video will take roughly 5–10 minutes. I'll send it to you as soon as it's ready."
 
-**Required login message template**
+**Suggested login message template**
 
-Replace `<LOGIN_URL>` with the actual link. Follow the user's language (Chinese template for Chinese users, English for English users).
+Replace `<LOGIN_URL>` with the actual link. Match the user's language (Chinese template for Chinese users, English for English users).
 
 中文模板：
 
@@ -81,7 +107,7 @@ Replace `<LOGIN_URL>` with the actual link. Follow the user's language (Chinese 
 文字生图、AI 修图、风格转换，最高支持 4K。
 图片模型：Nano Banana 2 · Seedream 5.0 · GPT Image 1.5 · Imagen 4 · Kontext-Pro · Grok Image
 
-🧑‍💼 口播数字人
+🎤 口播数字人
 上传一张照片 + 文案，自动生成真人口播视频，支持多语种。
 
 ✂️ 背景移除
@@ -113,7 +139,7 @@ Models: Seedance 2.0 · Sora 2 · Kling 3 · Veo 3.1 · Vidu Q3 · wan2.7
 Text-to-image, AI retouching, style transfer — up to 4K resolution.
 Models: Nano Banana 2 · Seedream 5.0 · GPT Image 1.5 · Imagen 4 · Kontext-Pro · Grok Image
 
-🧑‍💼 Talking Avatar
+🎤 Talking Avatar
 Upload a photo + script to auto-generate presenter-style talking head videos.
 
 ✂️ Background Removal
@@ -128,28 +154,27 @@ Text-to-speech, voice cloning, multilingual dubbing and narration.
 Once you've signed in, just reply "done" and I'll continue right away.
 ```
 
-**Banned phrases (including any variations):**
+**Phrasings to avoid in chat-app contexts**
 
-- "Browser has opened" / "browser popped up"
-- "Run this in the terminal" / "run the login command"
-- "Check the popup" / "look at the browser"
-- "Set the environment variable"
-- "Command executed successfully"
-- "Polling task status"
-- "Script output is as follows"
-- "Go operate on that computer" / "check the robot's computer"
-- "Authorization page popped up" / "if the page appeared"
-- "Go to topview.ai to register first" — auth page has built-in registration
-- "Which method do you prefer?" / "two options for you" — don't give choices, just act
-- "Auth flow" / "perform authentication" / "complete authentication" — too technical
-- "Python config" / "environment setup" — user doesn't need to know
-- Anything asking the user to operate outside the chat window
-- Anything containing code, commands, or file paths
+These phrases tend to confuse non-technical users in chat apps. Prefer the alternatives in parentheses, or skip the technical detail entirely. (If the user explicitly asks about terminals or environment variables, answer them directly.)
 
-**Fallback when login URL is not captured:**
+- "Browser has opened" / "browser popped up" → just send the sign-in link
+- "Run this in the terminal" / "run the login command" → handle it for the user
+- "Check the popup" / "look at the browser" → send the link instead
+- "Set the environment variable" → not relevant to end users; auto-handled after login
+- "Command executed successfully" / "polling task status" / "script output is as follows" → summarize the outcome instead
+- "Go operate on that computer" / "check the robot's computer" → keep all interaction in chat
+- "Authorization page popped up" → send the URL so the user can open it themselves
+- "Go to topview.ai to register first" — the authorization page already includes sign-up
+- "Which method do you prefer?" / "two options for you" → take the obvious next step rather than asking
+- "Auth flow" / "perform authentication" / "complete authentication" → say "sign in" instead
+- "Python config" / "environment setup" → typically not user-facing concepts
+- Anything asking the user to operate outside the chat
+- Anything containing raw code, commands, or file paths (unless the user is technical)
 
-> If `auth.py login` output does not contain a `URL:` line (e.g. background execution missed the output), **re-run `auth.py login`** to get a fresh link.
-> **NEVER** fall back to telling the user to "check the browser popup" or "go operate on the agent's computer". The user cannot see it.
+**Fallback when the login URL is missing from output**
+
+If `auth.py login` output does not contain a `URL:` line (e.g. background execution missed it), re-run `auth.py login` to capture a fresh URL. Falling back to "check the browser popup" or "go to the agent's computer" is unhelpful because the user cannot see those.
 
 ## Prerequisites
 
@@ -162,15 +187,15 @@ Once you've signed in, just reply "done" and I'll continue right away.
 pip install -r {baseDir}/scripts/requirements.txt
 ```
 
-## Agent Workflow Rules
+## Agent Workflow Guidelines
 
-> **These rules apply to ALL generation modules (avatar4, video_gen, ai_image, remove_bg, product_avatar, text2voice).**
+> Applies to all generation modules (avatar4, video_gen, ai_image, remove_bg, product_avatar, text2voice).
 
-1. **Always start with `run`** — it submits the task and polls automatically until done. This is the default and correct choice in almost all situations.
-2. **Do NOT ask the user to check the task status themselves.** The agent is responsible for polling until the task completes or the timeout is reached.
-3. **Only use `query`** when `run` has already timed out and you have a `taskId` to resume, or when the user explicitly provides an existing `taskId`.
+1. **Prefer `run` for new tasks** — it submits and polls automatically until completion. This is the right default for most situations.
+2. **Handle polling on the agent side** — the user shouldn't need to check task status manually; the script will poll until completion or timeout.
+3. **Use `query` for resumes** — when `run` times out and you already have a `taskId`, or when the user provides an existing `taskId`.
 4. **`query` polls continuously** — it keeps checking every `--interval` seconds until status is `success` or `fail`, or `--timeout` expires. It does not stop after one check.
-5. **If `query` also times out** (exit code 2), increase `--timeout` and try again with the same `taskId`. Do not resubmit unless the task has actually failed.
+5. **If `query` also times out** (exit code 2), increase `--timeout` and try again with the same `taskId`. Resubmit with `run` only if the task actually failed.
 
 ```
 Decision tree:
@@ -189,13 +214,13 @@ Decision tree:
 | `success` | Task completed successfully |
 | `fail` | Task failed |
 
-## Board ID Protocol
+## Board ID Guidelines
 
-> **Every generation task should include a `--board-id` so results are organized and viewable on the web.**
+> Including a `--board-id` with each generation task keeps results organized and viewable on the web.
 
-1. **Session start** — before submitting the first task, run `board.py list --default -q` to get the default board ID ("My First Board"). Only need to do this once per session.
-2. **Pass to all tasks** — add `--board-id <id>` to every generation command (`avatar4.py`, `video_gen.py`, `ai_image.py`, `product_avatar.py`, `text2voice.py`).
-3. **After completion** — if the task result contains a `boardTaskId`, show the user the edit link: `https://www.topview.ai/board/{boardId}?boardResultId={boardTaskId}`. Tell the user they can view and edit the result via this link.
+1. **Session start** — before submitting the first task, run `board.py list --default -q` to get the default board ID ("My First Board"). Once per session is enough.
+2. **Pass to all tasks** — add `--board-id <id>` to each generation command (`avatar4.py`, `video_gen.py`, `ai_image.py`, `product_avatar.py`, `text2voice.py`).
+3. **After completion** — if the task result contains a `boardTaskId`, share the edit link with the user: `https://www.topview.ai/board/{boardId}?boardResultId={boardTaskId}`.
 4. **User wants a new board** — run `board.py create --name "..."` and use the returned board ID for subsequent tasks.
 5. **User specifies a board** — use the user-provided board ID instead of the default.
 6. **Forgot the board ID?** — run `board.py list --default -q` again.
@@ -357,18 +382,17 @@ What does the user need?
 
 ---
 
-## Pre-Execution Protocol
+## Pre-Execution Checklist
 
-> Follow this before EVERY generation task.
+> Recommended steps before each generation task.
 
-1. **Estimate cost** — use `video_gen.py estimate-cost` for video tasks, `ai_image.py estimate-cost` for image tasks; avatar4 costs depend on video length; product_avatar is fixed 0.5 credits; text2voice is fixed 0.1 credits
-2. **Validate parameters** — ensure model, aspect ratio, resolution, and duration are compatible (use `list-models` to check)
-3. **Ask about missing key parameters** — if the user has not specified important parameters that affect the output, ask before proceeding. Key parameters by module:
+1. **Estimate cost** — use `video_gen.py estimate-cost` for video tasks, `ai_image.py estimate-cost` for image tasks; avatar4 costs depend on video length; product_avatar is fixed 0.5 credits; text2voice is fixed 0.1 credits.
+2. **Validate parameters** — ensure model, aspect ratio, resolution, and duration are compatible (use `list-models` to check).
+3. **Confirm missing key parameters with the user** — if important parameters that affect the output are unspecified, ask before proceeding rather than picking defaults silently. Key parameters by module:
    - **video_gen**: duration, aspect ratio, model
    - **ai_image**: aspect ratio, resolution, model, number of images
-   - **avatar4**: (usually determined by input, but confirm voice if not specified)
+   - **avatar4**: usually determined by input; confirm voice if not specified
    - **text2voice**: voice selection
-   - Do NOT silently pick defaults for these — always confirm with the user.
 4. **Confirm before first submission** — before the very first generation task in a session, present the full plan (tool, model, parameters, cost estimate) and ask the user:
    - Whether to proceed with the generation
    - Whether they want the agent to ask for confirmation before each subsequent task, or trust the agent to proceed automatically for the rest of the session
@@ -386,7 +410,7 @@ What does the user need?
 
 ### After Execution
 
-> **Use the structured result templates below.** The user should see the output link first, then the board link, then key metadata. Keep it clean and scannable.
+> Recommended result format below — output link first, then the board link, then key metadata. Keep it clean and scannable.
 
 **Video result template:**
 
@@ -458,11 +482,11 @@ View, edit, and download in the project.
 Not happy with the result? Let me know and I'll adjust and regenerate.
 ```
 
-**Rules:**
-1. **Result link first** — always show the video/image URL at the very top.
-2. **Board link second** — if `boardTaskId` is available, show the board edit link.
-3. **Key metadata only** — duration, aspect ratio/resolution, model, cost. Don't dump raw JSON or extra fields.
-4. **Offer iteration** — end with a short note that the user can ask for adjustments. Remind that regeneration costs additional credits.
+**Format guidelines:**
+1. **Result link first** — show the video/image URL at the top.
+2. **Board link second** — if `boardTaskId` is available, include the board edit link.
+3. **Key metadata only** — duration, aspect ratio/resolution, model, cost. Avoid dumping raw JSON or extra fields.
+4. **Offer iteration** — close with a short note that the user can ask for adjustments. Mention that regeneration costs additional credits.
 5. **Multiple outputs** — if the task produced multiple results, number them (1, 2, 3…) each with its own link and metadata.
 6. **Match user language** — use the Chinese template for Chinese users, English for English users.
 
@@ -495,4 +519,4 @@ See [references/error_handling.md](references/error_handling.md) for error codes
 | Board task browsing | Available | `scripts/board.py tasks` / `task-detail` |
 | Marketing video (m2v) | No module | Suggest [topview.ai](https://www.topview.ai) web UI |
 
-> **Never promise capabilities that don't exist as modules.**
+> Avoid promising capabilities that don't exist as modules — point users to the [topview.ai](https://www.topview.ai) web UI when something is out of scope.

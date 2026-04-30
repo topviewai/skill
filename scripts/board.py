@@ -42,7 +42,7 @@ BOARD_DELETE_PATH = "/boards/delete"
 BOARD_TASKS_PATH = "/boards/tasks/list"
 BOARD_TASK_DETAIL_PATH = "/boards/tasks/detail"
 
-BOARD_WEB_BASE = "https://aigc-web-base-preview.vercel.app/board"
+BOARD_WEB_BASE = "https://www.topview.ai/board"
 
 
 # ---------------------------------------------------------------------------
