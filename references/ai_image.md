@@ -56,6 +56,17 @@ python {baseDir}/scripts/ai_image.py run \
   --aspect-ratio "1:1"
 ```
 
+GPT Image 2:
+
+```bash
+python {baseDir}/scripts/ai_image.py run \
+  --type text2image \
+  --model "GPT Image 2" \
+  --prompt "A clean launch poster for a new AI image product with crisp readable text" \
+  --aspect-ratio "16:9" \
+  --resolution "2K"
+```
+
 ### Image Edit
 
 ```bash
@@ -125,6 +136,7 @@ python {baseDir}/scripts/ai_image.py run \
 | **Best overall (default)** | **Nano Banana 2** | Strongest all-round model |
 | **Budget** | Seedream 4.0 (0.15/img), Grok Image (0.15/img) | Lowest cost |
 | **No-resolution simplicity** | GPT Image 1.5, Kontext-Pro | No resolution param needed |
+| **GPT Image 2** | GPT Image 2 | TopView display-name model with 13 ratios and 1K/2K/4K |
 | **Auto aspect ratio** | Seedream 5.0, Seedream 4.5 | `auto` ratio |
 
 **Defaults:**
@@ -135,4 +147,8 @@ python {baseDir}/scripts/ai_image.py run \
 
 - `aspectRatio` is always required; image_edit models additionally support `"auto"`
 - `resolution` is required for some models, forbidden for others — check via `list-models`
+- `GPT Image 2` must be called exactly by TopView display name `"GPT Image 2"`; do not pass a provider code name or alias
+- `GPT Image 2` supports aspect ratios `9:16`, `3:4`, `1:1`, `4:3`, `16:9`, `2:3`, `3:2`, `5:4`, `4:5`, `21:9`, `9:21`, `1:2`, and `2:1`
+- `GPT Image 2` requires `--resolution "1K"`, `"2K"`, or `"4K"`
+- `GPT Image 2` image editing accepts up to 16 input images
 - **Imagen 4** is only available for text2image, not image_edit
