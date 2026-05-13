@@ -36,10 +36,12 @@ python {baseDir}/scripts/ai_image.py list-models --type image_edit --json
 
 ### Text-to-Image
 
+Default base model — GPT Image 2:
+
 ```bash
 python {baseDir}/scripts/ai_image.py run \
   --type text2image \
-  --model "Nano Banana 2" \
+  --model "GPT Image 2" \
   --prompt "A futuristic city skyline at dusk, neon lights reflected on wet streets" \
   --aspect-ratio "16:9" \
   --resolution "2K" \
@@ -56,12 +58,12 @@ python {baseDir}/scripts/ai_image.py run \
   --aspect-ratio "1:1"
 ```
 
-GPT Image 2:
+Strong alternative — Nano Banana 2 (best raw image fidelity):
 
 ```bash
 python {baseDir}/scripts/ai_image.py run \
   --type text2image \
-  --model "GPT Image 2" \
+  --model "Nano Banana 2" \
   --prompt "A clean launch poster for a new AI image product with crisp readable text" \
   --aspect-ratio "16:9" \
   --resolution "2K"
@@ -72,9 +74,9 @@ python {baseDir}/scripts/ai_image.py run \
 ```bash
 python {baseDir}/scripts/ai_image.py run \
   --type image_edit \
-  --model "Nano Banana 2" \
+  --model "GPT Image 2" \
   --prompt "Change the background to a snowy mountain landscape" \
-  --aspect-ratio "auto" \
+  --aspect-ratio "16:9" \
   --resolution "2K" \
   --input-images photo.jpg
 ```
@@ -84,7 +86,7 @@ Multi-image reference:
 ```bash
 python {baseDir}/scripts/ai_image.py run \
   --type image_edit \
-  --model "Nano Banana 2" \
+  --model "GPT Image 2" \
   --prompt "Blend the style of both images" \
   --aspect-ratio "1:1" \
   --resolution "2K" \
@@ -96,14 +98,14 @@ python {baseDir}/scripts/ai_image.py run \
 
 ```bash
 python {baseDir}/scripts/ai_image.py estimate-cost \
-  --type text2image --model "Nano Banana 2" --resolution "2K" --count 2
+  --type text2image --model "GPT Image 2" --resolution "2K" --count 2
 ```
 
 ### Download Results
 
 ```bash
 python {baseDir}/scripts/ai_image.py run \
-  --type text2image --model "Nano Banana 2" \
+  --type text2image --model "GPT Image 2" \
   --prompt "Northern lights" --aspect-ratio "16:9" --resolution "2K" \
   --output-dir ./results
 ```
@@ -128,20 +130,20 @@ python {baseDir}/scripts/ai_image.py run \
 
 ## Model Recommendation
 
-> **Nano Banana 2 is the top recommendation for all image tasks.**
-> Best overall quality, 14 aspect ratios, up to 4K, 14 reference images for editing.
+> **GPT Image 2 is the default base model for image generation.**
+> Strong text rendering, 13 aspect ratios, 1K/2K/4K resolution, and up to 16 reference images for editing — a solid all-round default for both text2image and image_edit.
 
 | Use Case | Recommended Models | Why |
 |----------|--------------------|-----|
-| **Best overall (default)** | **Nano Banana 2** | Strongest all-round model |
+| **Best overall (default)** | **GPT Image 2** | Default base model — strong text & all-round quality, 13 ratios, 1K/2K/4K |
+| **Strong alternative** | Nano Banana 2 | Best raw image fidelity, 14 ratios, up to 4K, 14 reference images |
 | **Budget** | Seedream 4.0 (0.15/img), Grok Image (0.15/img) | Lowest cost |
 | **No-resolution simplicity** | GPT Image 1.5, Kontext-Pro | No resolution param needed |
-| **GPT Image 2** | GPT Image 2 | TopView display-name model with 13 ratios and 1K/2K/4K |
 | **Auto aspect ratio** | Seedream 5.0, Seedream 4.5 | `auto` ratio |
 
 **Defaults:**
-- text2image → `Nano Banana 2`
-- image_edit → `Nano Banana 2`
+- text2image → `GPT Image 2`
+- image_edit → `GPT Image 2`
 
 ## Key Notes
 

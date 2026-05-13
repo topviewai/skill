@@ -75,7 +75,7 @@ metadata:
 |-----------|-------|---------------|
 | Video | Standard / Fast (Seedance 2.0) | ~5–10 min |
 | Video | All other video models (Kling, Sora, Veo, Vidu, etc.) | ~3–5 min |
-| Image | GPT Image 1.5 | ~1 min |
+| Image | GPT Image 2 / GPT Image 1.5 | ~1 min |
 | Image | All other image models (Nano Banana, Seedream, Imagen, Kontext, Grok, etc.) | ~30s–1 min |
 | Avatar | avatar4 | ~2–5 min (depends on script length) |
 | TTS | text2voice | ~10–30s |
@@ -105,7 +105,7 @@ Replace `<LOGIN_URL>` with the actual link. Match the user's language (Chinese t
 
 🖼️ AI 图片生成与编辑
 文字生图、AI 修图、风格转换，最高支持 4K。
-图片模型：Nano Banana 2 · Seedream 5.0 · GPT Image 1.5 · Imagen 4 · Kontext-Pro · Grok Image
+图片模型：GPT Image 2 · Nano Banana 2 · Seedream 5.0 · GPT Image 1.5 · Imagen 4 · Kontext-Pro · Grok Image
 
 🎤 口播数字人
 上传一张照片 + 文案，自动生成真人口播视频，支持多语种。
@@ -137,7 +137,7 @@ Models: Seedance 2.0 · Sora 2 · Kling 3 · Veo 3.1 · Vidu Q3 · wan2.7
 
 🖼️ AI Image Generation & Editing
 Text-to-image, AI retouching, style transfer — up to 4K resolution.
-Models: Nano Banana 2 · Seedream 5.0 · GPT Image 1.5 · Imagen 4 · Kontext-Pro · Grok Image
+Models: GPT Image 2 · Nano Banana 2 · Seedream 5.0 · GPT Image 1.5 · Imagen 4 · Kontext-Pro · Grok Image
 
 🎤 Talking Avatar
 Upload a photo + script to auto-generate presenter-style talking head videos.
@@ -352,7 +352,7 @@ What does the user need?
 
 > **Video model selection** — see [references/video_gen.md](references/video_gen.md) § Model Recommendation.
 
-> **Image model tip:** For all image tasks, default to **Nano Banana 2** — strongest all-round model with best quality, 14 aspect ratios, up to 4K, and 14 reference images for editing. See [references/ai_image.md](references/ai_image.md) § Model Recommendation.
+> **Image model tip:** For all image tasks, default to **GPT Image 2** — strong text rendering and all-round quality, 13 aspect ratios, 1K/2K/4K resolution, and up to 16 reference images for editing. Nano Banana 2 is a strong alternative when raw image fidelity matters more than text rendering. See [references/ai_image.md](references/ai_image.md) § Model Recommendation.
 
 > **Product Avatar workflow:** For best results, use the 2-step flow: `remove_bg.py` to get a `bgRemovedImageFileId`, then `product_avatar.py` with `--product-image-no-bg`. Use `product_avatar.py list-avatars` to browse public templates and get an `avatarId`. See [references/product_avatar.md](references/product_avatar.md) § Full Workflow.
 
