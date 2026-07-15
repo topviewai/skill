@@ -153,15 +153,22 @@ Use `<<<ImageN>>>` or `<<<VideoN>>>` to reference inputs:
 
 > **Note:** `Standard` and `Fast` are top-tier models with industry-leading visual quality, native audio, and up to 15s duration, delivered Seedance 2.0-level capabilities. Available for all three task types (i2v, t2v, omni). Use `Standard` for best quality; use `Fast` for quicker turnaround at similar quality.
 
+> **Newly added models:**
+> - **Seedance 2.0 Mini** — lightweight SD 2.0 model (i2v/t2v/omni), 480/720p, 4–15s, native audio.
+> - **Gemini Omni Flash** — replaces the deprecated `Topview Omni` (old name no longer accepted). Available for i2v/t2v (720/1080/2160p, 4/6/8/10s) and omni video-edit (duration follows the input video). No native audio.
+> - **Happy Horse 1.1** — i2v/t2v, 720/1080p, 3–15s, native audio.
+>
+> The default model stays **Standard (Seedance 2.0)** unless the user specifies otherwise.
+
 **By priority:**
 
 | Priority | Recommended Models | Why |
 |----------|--------------------|-----|
-| **Best quality** | Standard, Kling O3, Veo 3.1, Sora 2 Pro | Top-tier visual fidelity |
+| **Best quality** | Standard, Kling O3, Veo 3.1 | Top-tier visual fidelity |
 | **Fast turnaround** | Fast, Seedance 1.0 Pro Fast, Veo 3.1 Fast | Quicker, lower cost |
 | **Long clips (10s+)** | Standard/Fast (15s), Kling V3/O3 (15s), Vidu Q3 Pro (16s) | Extended duration |
 | **4K** | Veo 3.1, Veo 3.1 Fast | Only models with 2160p |
-| **Budget** | Topview Lite (0.1/s), Topview Pro (0.2/s) | Lowest cost |
+| **Budget** | Topview Pro (0.2/s), Seedance 1.0 Pro Fast (0.07/s @720p) | Lowest cost |
 | **Native audio** | Standard/Fast, Kling O3/V3, Veo 3.1, Vidu Q3 Pro | Ambient sound |
 
 **By channel:**

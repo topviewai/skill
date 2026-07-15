@@ -53,7 +53,7 @@ Fixed-price model (no resolution):
 ```bash
 python {baseDir}/scripts/ai_image.py run \
   --type text2image \
-  --model "GPT Image 1.5" \
+  --model "Kontext-Pro" \
   --prompt "A watercolor painting of a cat" \
   --aspect-ratio "1:1"
 ```
@@ -119,6 +119,7 @@ python {baseDir}/scripts/ai_image.py run \
 | `--prompt` | Text prompt (required) |
 | `--aspect-ratio` | Aspect ratio (required), e.g. `"16:9"`, `"1:1"`, `"auto"` |
 | `--resolution` | `"512p"`, `"1K"`, `"2K"`, `"4K"` — model-dependent |
+| `--quality` | `low` / `medium` / `high` — **only** GPT Image 2 and Reve Image models (default `medium`); forbidden for others |
 | `--count` | Number of images (1-4, default: 1) |
 | `--board-id` | Board ID |
 | `--input-images` | Reference image fileIds or local paths, space-separated (image_edit only). E.g. `--input-images photo.jpg` or `--input-images style.jpg content.jpg` |
@@ -137,9 +138,15 @@ python {baseDir}/scripts/ai_image.py run \
 |----------|--------------------|-----|
 | **Best overall (default)** | **GPT Image 2** | Default base model — strong text & all-round quality, 13 ratios, 1K/2K/4K |
 | **Strong alternative** | Nano Banana 2 | Best raw image fidelity, 14 ratios, up to 4K, 14 reference images |
-| **Budget** | Seedream 4.0 (0.15/img), Grok Image (0.15/img) | Lowest cost |
-| **No-resolution simplicity** | GPT Image 1.5, Kontext-Pro | No resolution param needed |
-| **Auto aspect ratio** | Seedream 5.0, Seedream 4.5 | `auto` ratio |
+| **High fidelity, lower cost** | Nano Banana 2 Lite | Same 14 ratios as Nano Banana 2, fixed `1K` only, cheaper (0.30/img) |
+| **Top-tier detail** | Seedream 5.0 Pro | Newest Seedream, up to `2K`, 9 ratios, 14 reference images |
+| **Budget high-res** | Seedream 5.0 Lite (0.20/img @2K) | 2K only, `auto` ratio, 14 reference images |
+| **Multi-image editing + 4K** | Kling V3 Omni | 1K/2K/4K, up to 10 reference images for editing |
+| **Quality-tier control** | GPT Image 2, Reve Image Remix | Support `--quality low/medium/high` |
+| **Multi-image remix (edit only)** | Reve Image Remix | Image Edit only, up to 6 reference images, `auto` ratio |
+| **Budget** | Seedream 4.0 (0.15/img), Grok Image (0.30/img) | Lowest cost |
+| **No-resolution simplicity** | Kontext-Pro, Imagen 4 | No resolution param needed |
+| **Auto aspect ratio** | Seedream 5.0 Pro / Lite, Seedream 4.5 | `auto` ratio |
 
 **Defaults:**
 - text2image → `GPT Image 2`
@@ -154,3 +161,9 @@ python {baseDir}/scripts/ai_image.py run \
 - `GPT Image 2` requires `--resolution "1K"`, `"2K"`, or `"4K"`
 - `GPT Image 2` image editing accepts up to 16 input images
 - **Imagen 4** is only available for text2image, not image_edit
+- **Nano Banana 2 Lite** supports only `--resolution "1K"` (fixed); same 14 aspect ratios as Nano Banana 2
+- **Seedream 5.0 Pro** requires `--resolution "1K"` or `"2K"`; supports `auto` ratio and up to 14 reference images for editing
+- **Seedream 5.0 Lite** supports only `--resolution "2K"` (fixed); `"Seedream 5.0"` is a compatibility alias for the Lite variant
+- **Kling V3 Omni** requires `--resolution "1K"`, `"2K"`, or `"4K"`; image editing accepts up to 10 input images (does not support `auto` ratio)
+- **GPT Image 2** requires `--resolution "1K"/"2K"/"4K"`; optionally accepts `--quality low/medium/high` (default `medium`); editing accepts up to 16 input images. Only `quality`-supporting models are GPT Image 2 and the Reve Image family
+- **Reve Image Remix** is **image_edit only** — requires `--resolution "1K"/"2K"/"4K"`, supports `auto` ratio, up to 6 reference images, and optional `--quality`

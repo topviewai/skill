@@ -68,19 +68,17 @@ DEFAULT_INTERVAL = 5
 I2V_MODELS = {
     "Standard":                      {"aspectRatio": None,                                          "resolution": [480, 720],        "duration": "4-15",   "nativeAudio": True,  "inputMode": "first_end"},
     "Fast":                          {"aspectRatio": None,                                          "resolution": [480, 720],        "duration": "4-15",   "nativeAudio": True,  "inputMode": "first_end"},
+    "Seedance 2.0 Mini":            {"aspectRatio": None,                                          "resolution": [480, 720],        "duration": "4-15",   "nativeAudio": True,  "inputMode": "first_end"},
     "Seedance 1.5 Pro":             {"aspectRatio": None,                                          "resolution": [720, 1080],       "duration": "4-12",   "nativeAudio": True,  "inputMode": "first_end"},
     "Seedance 1.0 Pro Fast":        {"aspectRatio": None,                                          "resolution": [720, 1080],       "duration": "5,10,12","nativeAudio": False, "inputMode": "single"},
     "Seedance 1.0 Pro":             {"aspectRatio": None,                                          "resolution": [720, 1080],       "duration": "5,10,12","nativeAudio": False, "inputMode": "first_end"},
     "Kling V3":                     {"aspectRatio": None,                                          "resolution": [720, 1080],       "duration": "3-15",   "nativeAudio": True,  "inputMode": "first_end"},
-    "Kling V3 Reference Video":     {"aspectRatio": ["9:16", "1:1", "16:9"],                       "resolution": [720, 1080],       "duration": "3-15",   "nativeAudio": True,  "inputMode": "multi_ref"},
     "Kling O3":                     {"aspectRatio": None,                                          "resolution": [720, 1080],       "duration": "3-15",   "nativeAudio": True,  "inputMode": "first_end"},
     "Kling O3 Reference-to-Video":  {"aspectRatio": ["9:16", "1:1", "16:9"],                       "resolution": [720, 1080],       "duration": "3-15",   "nativeAudio": True,  "inputMode": "multi_ref"},
     "Kling 2.6":                    {"aspectRatio": None,                                          "resolution": None,              "duration": "5,10",   "nativeAudio": True,  "inputMode": "single"},
     "Kling O1 Reference-to-Video":  {"aspectRatio": ["9:16", "1:1", "16:9"],                       "resolution": [1080],            "duration": "3-10",   "nativeAudio": False, "inputMode": "multi_ref"},
     "Kling 2.5 Turbo Pro":          {"aspectRatio": None,                                          "resolution": [1080],            "duration": "5,10",   "nativeAudio": False, "inputMode": "first_end"},
     "Kling 2.5 Turbo Std":          {"aspectRatio": None,                                          "resolution": [1080],            "duration": "5,10",   "nativeAudio": False, "inputMode": "single"},
-    "Sora 2":                       {"aspectRatio": ["9:16", "16:9"],                              "resolution": None,              "duration": "4,8,12", "nativeAudio": False, "inputMode": "single"},
-    "Sora 2 Pro":                   {"aspectRatio": ["9:16", "16:9"],                              "resolution": [720, 1080],       "duration": "4,8,12", "nativeAudio": False, "inputMode": "single"},
     "Veo 3.1":                      {"aspectRatio": ["9:16", "16:9"],                              "resolution": [720, 1080, 2160], "duration": "4,6,8",  "nativeAudio": True,  "inputMode": "first_end"},
     "Veo 3.1 Reference to video":   {"aspectRatio": ["9:16", "16:9"],                              "resolution": [720, 1080, 2160], "duration": "8",      "nativeAudio": True,  "inputMode": "multi_ref"},
     "Veo 3.1 Fast":                 {"aspectRatio": ["9:16", "16:9"],                              "resolution": [720, 1080, 2160], "duration": "4,6,8",  "nativeAudio": True,  "inputMode": "first_end"},
@@ -91,7 +89,8 @@ I2V_MODELS = {
     "Vidu Q3 Pro":                  {"aspectRatio": ["9:16", "3:4", "1:1", "4:3", "16:9"],         "resolution": [540, 720, 1080],  "duration": "1-16",   "nativeAudio": True,  "inputMode": "single"},
     "Vidu Q2 Reference to Video":   {"aspectRatio": ["9:16", "3:4", "1:1", "4:3", "16:9"],         "resolution": [1080],            "duration": "2-10",   "nativeAudio": False, "inputMode": "multi_ref"},
     "Wan 2.6":                      {"aspectRatio": None,                                          "resolution": [720, 1080],       "duration": "5,10,15","nativeAudio": True,  "inputMode": "single"},
-    "Topview Lite":                 {"aspectRatio": ["9:16", "3:4", "1:1", "4:3", "16:9"],         "resolution": None,              "duration": "5,10",   "nativeAudio": False, "inputMode": "single"},
+    "Gemini Omni Flash":            {"aspectRatio": ["9:16", "16:9"],                              "resolution": [720, 1080, 2160], "duration": "4,6,8,10","nativeAudio": False, "inputMode": "multi_ref"},
+    "Happy Horse 1.1":              {"aspectRatio": None,                                          "resolution": [720, 1080],       "duration": "3-15",   "nativeAudio": True,  "inputMode": "single"},
     "Topview Pro":                  {"aspectRatio": ["9:16", "3:4", "1:1", "4:3", "16:9"],         "resolution": None,              "duration": "5,10",   "nativeAudio": False, "inputMode": "single"},
     "Topview Plus":                 {"aspectRatio": ["9:16", "1:1", "16:9"],                       "resolution": None,              "duration": "5,10",   "nativeAudio": False, "inputMode": "single"},
     "Topview Best":                 {"aspectRatio": ["9:16", "1:1", "16:9"],                       "resolution": None,              "duration": "5,10",   "nativeAudio": False, "inputMode": "single"},
@@ -100,6 +99,7 @@ I2V_MODELS = {
 T2V_MODELS = {
     "Standard":                      {"aspectRatio": ["9:16", "3:4", "1:1", "4:3", "16:9", "21:9"], "resolution": [480, 720],        "duration": "4-15",   "nativeAudio": True},
     "Fast":                          {"aspectRatio": ["9:16", "3:4", "1:1", "4:3", "16:9", "21:9"], "resolution": [480, 720],        "duration": "4-15",   "nativeAudio": True},
+    "Seedance 2.0 Mini":            {"aspectRatio": ["9:16", "3:4", "1:1", "4:3", "16:9", "21:9"], "resolution": [480, 720],        "duration": "4-15",   "nativeAudio": True},
     "Seedance 1.5 Pro":             {"aspectRatio": ["9:16", "3:4", "1:1", "4:3", "16:9"],         "resolution": [720, 1080],       "duration": "4-12",   "nativeAudio": True},
     "Seedance 1.0 Pro Fast":        {"aspectRatio": ["9:16", "3:4", "1:1", "4:3", "16:9"],         "resolution": [720, 1080],       "duration": "5,10,12","nativeAudio": False},
     "Seedance 1.0 Pro":             {"aspectRatio": ["9:16", "3:4", "1:1", "4:3", "16:9"],         "resolution": [720, 1080],       "duration": "5,10,12","nativeAudio": False},
@@ -108,8 +108,6 @@ T2V_MODELS = {
     "Kling 2.6":                    {"aspectRatio": ["9:16", "1:1", "16:9"],                       "resolution": None,              "duration": "5,10",   "nativeAudio": True},
     "Kling 2.5 Turbo Pro":          {"aspectRatio": ["9:16", "1:1", "16:9"],                       "resolution": [1080],            "duration": "5,10",   "nativeAudio": False},
     "Kling 2.5 Turbo Std":          {"aspectRatio": ["9:16", "1:1", "16:9"],                       "resolution": [1080],            "duration": "5,10",   "nativeAudio": False},
-    "Sora 2":                       {"aspectRatio": ["9:16", "16:9"],                              "resolution": None,              "duration": "4,8,12", "nativeAudio": False},
-    "Sora 2 Pro":                   {"aspectRatio": ["9:16", "16:9"],                              "resolution": [720, 1080],       "duration": "4,8,12", "nativeAudio": False},
     "Veo 3.1":                      {"aspectRatio": ["9:16", "16:9"],                              "resolution": [720, 1080, 2160], "duration": "4,6,8",  "nativeAudio": True},
     "Veo 3.1 Fast":                 {"aspectRatio": ["9:16", "16:9"],                              "resolution": [720, 1080, 2160], "duration": "4,6,8",  "nativeAudio": True},
     "MiniMax-Hailuo-02":            {"aspectRatio": None,                                          "resolution": [768, 1080],       "duration": "6,10",   "nativeAudio": False},
@@ -117,17 +115,20 @@ T2V_MODELS = {
     "Vidu Q3 Pro":                  {"aspectRatio": ["9:16", "3:4", "1:1", "4:3", "16:9"],         "resolution": [540, 720, 1080],  "duration": "1-16",   "nativeAudio": True},
     "Vidu Q2":                      {"aspectRatio": ["9:16", "3:4", "1:1", "4:3", "16:9"],         "resolution": [1080],            "duration": "2-10",   "nativeAudio": False},
     "Wan 2.6":                      {"aspectRatio": ["9:16", "3:4", "1:1", "4:3", "16:9"],         "resolution": [720, 1080],       "duration": "5,10,15","nativeAudio": True},
-    "Topview Lite":                 {"aspectRatio": ["9:16", "3:4", "1:1", "4:3", "16:9"],         "resolution": None,              "duration": "5,10",   "nativeAudio": False},
+    "Gemini Omni Flash":            {"aspectRatio": ["9:16", "16:9"],                              "resolution": [720, 1080, 2160], "duration": "4,6,8,10","nativeAudio": False},
+    "Happy Horse 1.1":              {"aspectRatio": ["9:16", "3:4", "1:1", "4:3", "16:9"],         "resolution": [720, 1080],       "duration": "3-15",   "nativeAudio": True},
     "Topview Pro":                  {"aspectRatio": ["9:16", "3:4", "1:1", "4:3", "16:9"],         "resolution": None,              "duration": "5,10",   "nativeAudio": False},
     "Topview Plus":                 {"aspectRatio": ["9:16", "1:1", "16:9"],                       "resolution": None,              "duration": "5,10",   "nativeAudio": False},
     "Topview Best":                 {"aspectRatio": ["9:16", "1:1", "16:9"],                       "resolution": None,              "duration": "5,10",   "nativeAudio": False},
 }
 
 OMNI_MODELS = {
-    "Standard":              {"aspectRatio": ["9:16", "3:4", "1:1", "4:3", "16:9", "21:9"], "resolution": [480, 720],  "duration": "4-15",  "internetSearch": True,  "nativeAudio": True},
-    "Fast":                  {"aspectRatio": ["9:16", "3:4", "1:1", "4:3", "16:9", "21:9"], "resolution": [480, 720],  "duration": "4-15",  "internetSearch": True,  "nativeAudio": True},
-    "Kling O3 Video-Edit":   {"aspectRatio": None,                                          "resolution": [720, 1080], "duration": "3-10",  "internetSearch": False, "nativeAudio": False},
-    "Kling O1 Video-Edit":   {"aspectRatio": None,                                          "resolution": [1080],      "duration": "3-10",  "internetSearch": False, "nativeAudio": False},
+    "Standard":              {"aspectRatio": ["9:16", "3:4", "1:1", "4:3", "16:9", "21:9"], "resolution": [480, 720],        "duration": "4-15",  "internetSearch": True,  "nativeAudio": True},
+    "Fast":                  {"aspectRatio": ["9:16", "3:4", "1:1", "4:3", "16:9", "21:9"], "resolution": [480, 720],        "duration": "4-15",  "internetSearch": True,  "nativeAudio": True},
+    "Seedance 2.0 Mini":     {"aspectRatio": ["9:16", "3:4", "1:1", "4:3", "16:9", "21:9"], "resolution": [480, 720],        "duration": "4-15",  "internetSearch": True,  "nativeAudio": True},
+    "Gemini Omni Flash":     {"aspectRatio": None,                                          "resolution": [720, 1080, 2160], "duration": "",      "internetSearch": False, "nativeAudio": False},
+    "Kling O3 Video-Edit":   {"aspectRatio": None,                                          "resolution": [720, 1080],       "duration": "3-10",  "internetSearch": False, "nativeAudio": False},
+    "Kling O1 Video-Edit":   {"aspectRatio": None,                                          "resolution": [1080],            "duration": "3-10",  "internetSearch": False, "nativeAudio": False},
 }
 
 MODEL_REGISTRY = {"i2v": I2V_MODELS, "t2v": T2V_MODELS, "omni": OMNI_MODELS}
@@ -140,21 +141,18 @@ MODEL_REGISTRY = {"i2v": I2V_MODELS, "t2v": T2V_MODELS, "omni": OMNI_MODELS}
 # ---------------------------------------------------------------------------
 
 _RATE = {
-    "Standard":                {(0, None): 1.0},
-    "Fast":                    {(0, None): 1.0},
+    "Standard":                {(480, None): 0.4, (720, None): 1.0, (1080, None): 2.0},
+    "Fast":                    {(480, None): 0.32, (720, None): 0.64},
     "Seedance 1.5 Pro":        {(720, False): 0.12, (720, True): 0.25, (1080, False): 0.28, (1080, True): 0.55},
     "Seedance 1.0 Pro Fast":   {(720, None): 0.07, (1080, None): 0.15},
     "Seedance 1.0 Pro":        {(720, None): 0.20, (1080, None): 0.45},
     "Kling V3":                {(720, False): 0.50, (720, True): 0.80, (1080, False): 0.80, (1080, True): 1.00},
-    "Kling V3 Reference Video":{(720, False): 0.50, (720, True): 0.80, (1080, False): 0.80, (1080, True): 1.00},
     "Kling O3":                {(720, False): 0.50, (720, True): 0.60, (1080, False): 0.80, (1080, True): 0.90},
     "Kling O3 Reference-to-Video": {(720, False): 0.50, (720, True): 0.60, (1080, False): 0.80, (1080, True): 0.90},
     "Kling 2.6":               {(0, False): 0.31, (0, True): 0.65},
     "Kling O1 Reference-to-Video": {(1080, None): 0.50},
     "Kling 2.5 Turbo Pro":     {(1080, None): 0.31},
     "Kling 2.5 Turbo Std":     {(1080, None): 0.20},
-    "Sora 2":                  {(0, None): 0.56},
-    "Sora 2 Pro":              {(720, None): 1.68, (1080, None): 2.80},
     "Veo 3.1":                 {(720, False): 1.10, (720, True): 2.20, (1080, False): 1.10, (1080, True): 2.20, (2160, False): 2.20, (2160, True): 3.30},
     "Veo 3.1 Reference to video": {(720, False): 1.10, (720, True): 2.20, (1080, False): 1.10, (1080, True): 2.20, (2160, False): 2.20, (2160, True): 3.30},
     "Veo 3.1 Fast":            {(720, False): 0.60, (720, True): 0.90, (1080, False): 0.60, (1080, True): 0.90, (2160, False): 1.70, (2160, True): 2.00},
@@ -166,12 +164,12 @@ _RATE = {
     "Vidu Q2":                 {(1080, None): 0.28},
     "Vidu Q2 Reference to Video": {(1080, None): 0.56},
     "Wan 2.6":                 {(720, None): 0.46, (1080, None): 0.77},
-    "Topview Lite":            {(0, None): 0.10},
+    "Gemini Omni Flash":       {(720, None): 0.5, (1080, None): 0.75, (2160, None): 1.0},
+    "Seedance 2.0 Mini":       {(480, None): 0.32, (720, None): 0.64},
+    "Happy Horse 1.1":         {(720, None): 1.2, (1080, None): 2.0},
     "Topview Pro":             {(0, None): 0.20},
     "Topview Plus":            {(0, None): 0.54},
     "Topview Best":            {(0, None): 1.55},
-    "Standard":                {(0, None): 1.0},
-    "Fast":                    {(0, None): 1.0},
     "Kling O3 Video-Edit":     {(720, None): 1.70, (1080, None): 2.00},
     "Kling O1 Video-Edit":     {(0, None): 0.80},
 }
@@ -192,6 +190,8 @@ def estimate_cost(model: str, resolution: int | None, duration: int,
 
 def _parse_duration_spec(spec: str) -> str:
     """Convert duration spec to human-readable hint for error messages."""
+    if not spec:
+        return "by video"
     if "," in spec:
         return f"one of [{spec}]s"
     if "-" in spec:

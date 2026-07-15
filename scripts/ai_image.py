@@ -63,29 +63,38 @@ DEFAULT_INTERVAL = 3
 # ---------------------------------------------------------------------------
 
 TEXT2IMAGE_MODELS = {
-    "Nano Banana 2":   {"aspectRatio": ["9:16", "3:4", "1:1", "4:3", "16:9", "2:3", "3:2", "5:4", "4:5", "21:9", "4:1", "1:4", "8:1", "1:8"], "resolution": ["512p", "1K", "2K", "4K"]},
-    "Nano Banana Pro":  {"aspectRatio": ["9:16", "3:4", "1:1", "4:3", "16:9"],                                                                  "resolution": ["1K", "2K", "4K"]},
+    "Nano Banana 2":      {"aspectRatio": ["9:16", "3:4", "1:1", "4:3", "16:9", "2:3", "3:2", "5:4", "4:5", "21:9", "4:1", "1:4", "8:1", "1:8"], "resolution": ["512p", "1K", "2K", "4K"]},
+    "Nano Banana 2 Lite": {"aspectRatio": ["9:16", "3:4", "1:1", "4:3", "16:9", "2:3", "3:2", "5:4", "4:5", "21:9", "4:1", "1:4", "8:1", "1:8"], "resolution": ["1K"]},
+    "Nano Banana Pro":  {"aspectRatio": ["1:1", "2:3", "3:2", "3:4", "4:3", "4:5", "5:4", "9:16", "16:9", "21:9"],                               "resolution": ["1K", "2K", "4K"]},
     "Nano Banana":      {"aspectRatio": ["9:16", "3:4", "1:1", "4:3", "16:9"],                                                                  "resolution": None},
+    "Seedream 5.0 Pro": {"aspectRatio": ["auto", "9:16", "3:4", "2:3", "1:1", "3:2", "4:3", "16:9", "21:9"],                                    "resolution": ["1K", "2K"]},
+    "Seedream 5.0 Lite":{"aspectRatio": ["auto", "9:16", "3:4", "1:1", "4:3", "16:9", "21:9"],                                                  "resolution": ["2K"]},
     "Seedream 5.0":     {"aspectRatio": ["auto", "9:16", "3:4", "1:1", "4:3", "16:9", "21:9"],                                                  "resolution": ["2K"]},
     "Seedream 4.5":     {"aspectRatio": ["auto", "9:16", "3:4", "1:1", "4:3", "16:9", "21:9"],                                                  "resolution": ["2K", "4K"]},
     "Seedream 4.0":     {"aspectRatio": ["auto", "9:16", "3:4", "1:1", "4:3", "16:9", "21:9"],                                                  "resolution": ["1K", "2K", "4K"]},
-    "Grok Image Pro":   {"aspectRatio": ["1:1", "16:9", "9:16", "4:3", "3:4", "3:2", "2:3", "2:1", "1:2", "20:9", "9:20", "19.5:9", "9:19.5"],  "resolution": ["1K", "2K"]},
+    "Grok Image Quality": {"aspectRatio": ["1:1", "16:9", "9:16", "4:3", "3:4", "3:2", "2:3", "2:1", "1:2", "20:9", "9:20", "19.5:9", "9:19.5"], "resolution": ["1K", "2K"]},
     "Grok Image":       {"aspectRatio": ["1:1", "16:9", "9:16", "4:3", "3:4", "3:2", "2:3", "2:1", "1:2", "20:9", "9:20", "19.5:9", "9:19.5"],  "resolution": ["1K", "2K"]},
-    "GPT Image 1.5":    {"aspectRatio": ["3:2", "1:1", "2:3"],                                                                                  "resolution": None},
+    "Kling V3 Omni":    {"aspectRatio": ["9:16", "3:4", "2:3", "1:1", "3:2", "4:3", "16:9", "21:9"],                                            "resolution": ["1K", "2K", "4K"]},
+    "GPT Image 2":      {"aspectRatio": ["9:16", "3:4", "1:1", "4:3", "16:9", "2:3", "3:2", "5:4", "4:5", "21:9", "9:21", "1:2", "2:1"],        "resolution": ["1K", "2K", "4K"], "quality": ["low", "medium", "high"]},
     "Kontext-Pro":      {"aspectRatio": ["9:16", "3:4", "1:1", "4:3", "16:9"],                                                                  "resolution": None},
     "Imagen 4":         {"aspectRatio": ["9:16", "3:4", "1:1", "4:3", "16:9"],                                                                  "resolution": None},
 }
 
 IMAGE_EDIT_MODELS = {
-    "Nano Banana 2":   {"aspectRatio": ["auto", "9:16", "3:4", "1:1", "4:3", "16:9", "2:3", "3:2", "5:4", "4:5", "21:9", "4:1", "1:4", "8:1", "1:8"], "resolution": ["512p", "1K", "2K", "4K"], "maxImages": 14},
-    "Nano Banana Pro":  {"aspectRatio": ["auto", "9:16", "3:4", "1:1", "4:3", "16:9"],                                                                  "resolution": ["1K", "2K", "4K"],       "maxImages": 6},
+    "Nano Banana 2":      {"aspectRatio": ["auto", "9:16", "3:4", "1:1", "4:3", "16:9", "2:3", "3:2", "5:4", "4:5", "21:9", "4:1", "1:4", "8:1", "1:8"], "resolution": ["512p", "1K", "2K", "4K"], "maxImages": 14},
+    "Nano Banana 2 Lite": {"aspectRatio": ["auto", "9:16", "3:4", "1:1", "4:3", "16:9", "2:3", "3:2", "5:4", "4:5", "21:9", "4:1", "1:4", "8:1", "1:8"], "resolution": ["1K"],                     "maxImages": 14},
+    "Nano Banana Pro":  {"aspectRatio": ["auto", "1:1", "2:3", "3:2", "3:4", "4:3", "4:5", "5:4", "9:16", "16:9", "21:9"],                               "resolution": ["1K", "2K", "4K"],       "maxImages": 6},
     "Nano Banana":      {"aspectRatio": ["auto", "9:16", "3:4", "1:1", "4:3", "16:9"],                                                                  "resolution": None,                     "maxImages": 6},
+    "Seedream 5.0 Pro": {"aspectRatio": ["auto", "9:16", "3:4", "2:3", "1:1", "3:2", "4:3", "16:9", "21:9"],                                            "resolution": ["1K", "2K"],             "maxImages": 14},
+    "Seedream 5.0 Lite":{"aspectRatio": ["auto", "9:16", "3:4", "1:1", "4:3", "16:9", "21:9"],                                                          "resolution": ["2K"],                   "maxImages": 14},
     "Seedream 5.0":     {"aspectRatio": ["auto", "9:16", "3:4", "1:1", "4:3", "16:9", "21:9"],                                                          "resolution": ["2K"],                   "maxImages": 14},
     "Seedream 4.5":     {"aspectRatio": ["auto", "9:16", "3:4", "1:1", "4:3", "16:9", "21:9"],                                                          "resolution": ["2K", "4K"],             "maxImages": 14},
     "Seedream 4.0":     {"aspectRatio": ["auto", "9:16", "3:4", "1:1", "4:3", "16:9", "21:9"],                                                          "resolution": ["1K", "2K", "4K"],       "maxImages": 5},
-    "Grok Image Pro":   {"aspectRatio": ["1:1", "16:9", "9:16", "4:3", "3:4", "3:2", "2:3", "2:1", "1:2", "20:9", "9:20", "19.5:9", "9:19.5"],          "resolution": ["1K", "2K"],             "maxImages": 1},
+    "Grok Image Quality": {"aspectRatio": ["1:1", "16:9", "9:16", "4:3", "3:4", "3:2", "2:3", "2:1", "1:2", "20:9", "9:20", "19.5:9", "9:19.5"],        "resolution": ["1K", "2K"],             "maxImages": 3},
     "Grok Image":       {"aspectRatio": ["1:1", "16:9", "9:16", "4:3", "3:4", "3:2", "2:3", "2:1", "1:2", "20:9", "9:20", "19.5:9", "9:19.5"],          "resolution": ["1K", "2K"],             "maxImages": 1},
-    "GPT Image 1.5":    {"aspectRatio": ["3:2", "1:1", "2:3"],                                                                                          "resolution": None,                     "maxImages": 8},
+    "Kling V3 Omni":    {"aspectRatio": ["9:16", "3:4", "2:3", "1:1", "3:2", "4:3", "16:9", "21:9"],                                                    "resolution": ["1K", "2K", "4K"],       "maxImages": 10},
+    "GPT Image 2":      {"aspectRatio": ["9:16", "3:4", "1:1", "4:3", "16:9", "2:3", "3:2", "5:4", "4:5", "21:9", "9:21", "1:2", "2:1"],                "resolution": ["1K", "2K", "4K"],       "maxImages": 16, "quality": ["low", "medium", "high"]},
+    "Reve Image Remix": {"aspectRatio": ["auto", "9:16", "3:4", "2:3", "1:1", "3:2", "4:3", "16:9"],                                                    "resolution": ["1K", "2K", "4K"],       "maxImages": 6,  "quality": ["low", "medium", "high"]},
     "Kontext-Pro":      {"aspectRatio": ["auto", "9:16", "3:4", "1:1", "4:3", "16:9"],                                                                  "resolution": None,                     "maxImages": 1},
 }
 
@@ -99,28 +108,37 @@ MODEL_REGISTRY = {"text2image": TEXT2IMAGE_MODELS, "image_edit": IMAGE_EDIT_MODE
 
 _PRICING = {
     "text2image": {
-        "Nano Banana 2":   {"512p": 0.25, "1K": 0.40, "2K": 0.60, "4K": 0.85},
+        "Nano Banana 2":      {"512p": 0.25, "1K": 0.40, "2K": 0.60, "4K": 0.85},
+        "Nano Banana 2 Lite": {"1K": 0.30},
         "Nano Banana Pro":  {"1K": 0.80, "2K": 0.80, "4K": 1.40},
         "Nano Banana":      {"default": 0.30},
+        "Seedream 5.0 Pro": {"1K": 0.40, "2K": 0.80},
+        "Seedream 5.0 Lite":{"2K": 0.20},
         "Seedream 5.0":     {"2K": 0.20},
         "Seedream 4.5":     {"2K": 0.20, "4K": 0.20},
         "Seedream 4.0":     {"1K": 0.15, "2K": 0.15, "4K": 0.15},
-        "Grok Image Pro":   {"1K": 0.45, "2K": 0.45},
-        "Grok Image":       {"1K": 0.15, "2K": 0.15},
-        "GPT Image 1.5":    {"default": 2.00},
+        "Grok Image Quality": {"1K": 0.60, "2K": 1.00},
+        "Grok Image":       {"1K": 0.30, "2K": 0.30},
+        "Kling V3 Omni":    {"1K": 0.30, "2K": 0.30, "4K": 0.60},
+        "GPT Image 2":      {"1K": 0.20, "2K": 0.80, "4K": 1.40},
         "Kontext-Pro":      {"default": 0.50},
         "Imagen 4":         {"default": 0.50},
     },
     "image_edit": {
-        "Nano Banana 2":   {"512p": 0.25, "1K": 0.40, "2K": 0.60, "4K": 0.85},
+        "Nano Banana 2":      {"512p": 0.25, "1K": 0.40, "2K": 0.60, "4K": 0.85},
+        "Nano Banana 2 Lite": {"1K": 0.30},
         "Nano Banana Pro":  {"1K": 0.80, "2K": 0.80, "4K": 1.40},
         "Nano Banana":      {"default": 0.30},
+        "Seedream 5.0 Pro": {"1K": 0.40, "2K": 0.80},
+        "Seedream 5.0 Lite":{"2K": 0.20},
         "Seedream 5.0":     {"2K": 0.20},
         "Seedream 4.5":     {"2K": 0.20, "4K": 0.20},
         "Seedream 4.0":     {"1K": 0.15, "2K": 0.15, "4K": 0.15},
-        "Grok Image Pro":   {"1K": 0.45, "2K": 0.45},
-        "Grok Image":       {"1K": 0.15, "2K": 0.15},
-        "GPT Image 1.5":    {"default": 2.00},
+        "Grok Image Quality": {"1K": 0.60, "2K": 1.00},
+        "Grok Image":       {"1K": 0.30, "2K": 0.30},
+        "Kling V3 Omni":    {"1K": 0.30, "2K": 0.30, "4K": 0.60},
+        "GPT Image 2":      {"1K": 0.20, "2K": 0.80, "4K": 1.40},
+        "Reve Image Remix": {"1K": 1.60, "2K": 1.80, "4K": 2.00},
         "Kontext-Pro":      {"default": 0.50},
     },
 }
@@ -140,7 +158,8 @@ def estimate_cost(task_type: str, model: str, resolution: str | None,
 
 
 def validate_model_params(task_type: str, model: str, aspect_ratio: str | None,
-                          resolution: str | None, quiet: bool) -> None:
+                          resolution: str | None, quality: str | None,
+                          quiet: bool) -> None:
     """Warn on stderr if parameters are incompatible with model constraints."""
     registry = MODEL_REGISTRY.get(task_type, {})
     if model not in registry:
@@ -154,6 +173,22 @@ def validate_model_params(task_type: str, model: str, aspect_ratio: str | None,
         return
 
     spec = registry[model]
+
+    supported_quality = spec.get("quality")
+    if quality and not supported_quality:
+        if not quiet:
+            print(
+                f"Warning: model '{model}' does not support quality "
+                f"(got '{quality}'). Do NOT send this parameter.",
+                file=sys.stderr,
+            )
+    elif quality and supported_quality and quality not in supported_quality:
+        if not quiet:
+            print(
+                f"Warning: model '{model}' supports quality "
+                f"{supported_quality}, got '{quality}'.",
+                file=sys.stderr,
+            )
 
     if aspect_ratio and aspect_ratio not in spec["aspectRatio"]:
         if not quiet:
@@ -204,6 +239,8 @@ def build_text2image_body(args) -> dict:
     }
     if args.resolution:
         body["resolution"] = args.resolution
+    if getattr(args, "quality", None):
+        body["quality"] = args.quality
     if args.board_id:
         body["boardId"] = args.board_id
     return body
@@ -222,6 +259,8 @@ def build_image_edit_body(args, client: TopviewClient) -> dict:
         ]
     if args.resolution:
         body["resolution"] = args.resolution
+    if getattr(args, "quality", None):
+        body["quality"] = args.quality
     if args.board_id:
         body["boardId"] = args.board_id
     return body
@@ -233,6 +272,7 @@ def build_body(args, client: TopviewClient) -> dict:
         args.type, args.model,
         getattr(args, "aspect_ratio", None),
         getattr(args, "resolution", None),
+        getattr(args, "quality", None),
         args.quiet,
     )
     if args.type == "text2image":
@@ -348,6 +388,8 @@ def add_common_args(p):
                    help='Aspect ratio, e.g. "16:9", "1:1", "auto"')
     p.add_argument("--resolution", default=None,
                    help='Resolution: "512p", "1K", "2K", "4K" (model-dependent, some require it, some forbid it)')
+    p.add_argument("--quality", default=None, choices=["low", "medium", "high"],
+                   help='Quality tier: low / medium / high. Only GPT Image 2 and Reve Image models support it (default medium); forbidden for others')
     p.add_argument("--count", type=int, default=1,
                    help="Number of images to generate (1-4, default: 1)")
     p.add_argument("--board-id", default=None,

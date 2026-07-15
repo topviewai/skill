@@ -35,6 +35,10 @@ metadata:
 # Topview AI Skill
 
 > Modular Python toolkit for the [Topview AI](https://www.topview.ai) API.
+>
+> **Last updated:** 2026-07-15
+
+> **If a model or feature the user wants is not found in this skill**, do **not** reply "not supported". First query the official Topview docs, then update the skill — see [references/updating_models.md](references/updating_models.md) for the full procedure.
 
 ✨ **Generate. Edit. Collaborate. — All in One Place.** ✨
 
@@ -74,55 +78,20 @@ metadata:
 | Task Type | Model | Estimated Time |
 |-----------|-------|---------------|
 | Video | Standard / Fast (Seedance 2.0) | ~5–10 min |
-| Video | All other video models (Kling, Sora, Veo, Vidu, etc.) | ~3–5 min |
-| Image | GPT Image 2 / GPT Image 1.5 | ~1 min |
+| Video | All other video models (Kling, Veo, Vidu, etc.) | ~3–5 min |
+| Image | GPT Image 2 | ~1 min |
 | Image | All other image models (Nano Banana, Seedream, Imagen, Kontext, Grok, etc.) | ~30s–1 min |
 | Avatar | avatar4 | ~2–5 min (depends on script length) |
 | TTS | text2voice | ~10–30s |
 | Remove BG | remove_bg | ~10–30s |
 | Product Avatar | product_avatar | ~1–2 min |
 
-Example messages after submitting:
-- Chinese: "已经开始生成了，视频大约需要 5-10 分钟，请稍等~"
-- English: "Generation started — the video will take roughly 5–10 minutes. I'll send it to you as soon as it's ready."
+Example message after submitting (translate to the user's language):
+- "Generation started — the video will take roughly 5–10 minutes. I'll send it to you as soon as it's ready."
 
 **Suggested login message template**
 
-Replace `<LOGIN_URL>` with the actual link. Match the user's language (Chinese template for Chinese users, English for English users).
-
-中文模板：
-
-```text
-安装完成，Topview Skill 已连接到你的智能助手。
-
-复制下方链接到浏览器中登录，登录后将解锁以下能力：
-
-<LOGIN_URL>
-
-🎬 视频生成
-文字转视频、图片转视频、参考视频生成，自动配音配乐。
-视频模型：Seedance 2.0 · Sora 2 · Kling 3 · Veo 3.1 · Vidu Q3 · wan2.7
-
-🖼️ AI 图片生成与编辑
-文字生图、AI 修图、风格转换，最高支持 4K。
-图片模型：GPT Image 2 · Nano Banana 2 · Seedream 5.0 · GPT Image 1.5 · Imagen 4 · Kontext-Pro · Grok Image
-
-🎤 口播数字人
-上传一张照片 + 文案，自动生成真人口播视频，支持多语种。
-
-✂️ 背景移除
-一键抠图，产品图、人像、任意图片秒去背景。
-
-👗 产品模特图
-把你的产品图放到模特身上，自动生成带货展示图。
-
-🎙️ 语音与配音
-文字转语音、声音克隆，支持多语种配音输出。
-
-登录完成后回我一句"好了"，我马上继续。
-```
-
-English template:
+Replace `<LOGIN_URL>` with the actual link. This template is written in English — **translate it to match the user's language** (e.g. Chinese for Chinese users) before sending.
 
 ```text
 Installation complete. Topview Skill is now connected to your agent.
@@ -133,11 +102,11 @@ Copy the link below into your browser to sign in. After signing in, the followin
 
 🎬 Video Generation
 Text-to-video, image-to-video, reference-based generation with auto sound & music.
-Models: Seedance 2.0 · Sora 2 · Kling 3 · Veo 3.1 · Vidu Q3 · wan2.7
+Models: Seedance 2.0 · Seedance 2.0 Mini · Kling 3 · Veo 3.1 · Vidu Q3 · wan2.7
 
 🖼️ AI Image Generation & Editing
 Text-to-image, AI retouching, style transfer — up to 4K resolution.
-Models: GPT Image 2 · Nano Banana 2 · Seedream 5.0 · GPT Image 1.5 · Imagen 4 · Kontext-Pro · Grok Image
+Models: GPT Image 2 · Nano Banana 2 · Seedream 5.0 Pro · Kling V3 Omni · Imagen 4 · Kontext-Pro · Grok Image
 
 🎤 Talking Avatar
 Upload a photo + script to auto-generate presenter-style talking head videos.
@@ -274,60 +243,7 @@ Every time a user requests content, identify:
 
 ### Step 2 — Tool Selection
 
-```
-What does the user need?
-│
-├─ A person speaking to camera (talking head)?
-│  → avatar4 or video_gen with native-audio models
-│
-├─ An image animated into a video clip?
-│  → video_gen --type i2v
-│
-├─ A video generated purely from text?
-│  → video_gen --type t2v
-│
-├─ A new video based on reference materials (style transfer, editing)?
-│  → video_gen --type omni
-│
-├─ An image generated from a text prompt?
-│  → ai_image --type text2image
-│
-├─ An existing image edited / modified with AI?
-│  → ai_image --type image_edit
-│
-├─ Remove background from an image (e.g. product cutout)?
-│  → remove_bg
-│
-├─ A product placed into a model/avatar scene?
-│  → product_avatar (use remove_bg first if product has background)
-│  → product_avatar list-avatars to browse public templates
-│
-├─ Browse available caption styles for avatar videos?
-│  → avatar4 list-captions
-│
-├─ Text converted to speech audio?
-│  → text2voice
-│
-├─ Need to find a voice / list available voices?
-│  → voice list
-│
-├─ Clone a custom voice from audio sample?
-│  → voice clone
-│
-├─ Delete a custom voice?
-│  → voice delete
-│
-├─ Manage boards / view results on web?
-│  → board (list, create, detail, tasks)
-│
-├─ A combination (e.g., talking head + product clips)?
-│  → Use a recipe (see Step 3)
-│
-└─ Outside current capabilities?
-   → See Capability Boundaries below
-```
-
-**Quick-reference routing table:**
+Route the user's request to the right script. For a combination request (e.g. talking head + product clips), plan a recipe (see Step 3). If something is outside current capabilities, see Capability Boundaries below.
 
 | User says... | Script & Type |
 |----------------------------------------------|-------------|
@@ -411,43 +327,9 @@ What does the user need?
 ### After Execution
 
 > Recommended result format below — output link first, then the board link, then key metadata. Keep it clean and scannable.
+> Templates are written in English — **translate to match the user's language** before sending.
 
 **Video result template:**
-
-```text
-🎬 视频已生成完成
-
-视频地址：<VIDEO_URL>
-• 时长：<DURATION>
-• 画幅：<ASPECT_RATIO>
-• 模型：<MODEL_NAME>
-• 消耗：<COST> credits
-
-🔗 项目链接
-https://www.topview.ai/board/<BOARD_ID>?boardResultId=<BOARD_TASK_ID>
-可在项目中查看、编辑和下载。
-
-不满意的话可以告诉我，我帮你调整后重新生成。
-```
-
-**Image result template:**
-
-```text
-🖼️ 图片已生成完成
-
-图片地址：<IMAGE_URL>
-• 分辨率：<RESOLUTION>
-• 模型：<MODEL_NAME>
-• 消耗：<COST> credits
-
-🔗 项目链接
-https://www.topview.ai/board/<BOARD_ID>?boardResultId=<BOARD_TASK_ID>
-可在项目中查看、编辑和下载。
-
-不满意的话可以告诉我，我帮你调整后重新生成。
-```
-
-**English video result template:**
 
 ```text
 🎬 Video generated
@@ -465,7 +347,7 @@ View, edit, and download in the project.
 Not happy with the result? Let me know and I'll adjust and regenerate.
 ```
 
-**English image result template:**
+**Image result template:**
 
 ```text
 🖼️ Image generated
@@ -488,7 +370,7 @@ Not happy with the result? Let me know and I'll adjust and regenerate.
 3. **Key metadata only** — duration, aspect ratio/resolution, model, cost. Avoid dumping raw JSON or extra fields.
 4. **Offer iteration** — close with a short note that the user can ask for adjustments. Mention that regeneration costs additional credits.
 5. **Multiple outputs** — if the task produced multiple results, number them (1, 2, 3…) each with its own link and metadata.
-6. **Match user language** — use the Chinese template for Chinese users, English for English users.
+6. **Match user language** — translate the template to the user's language before sending.
 
 ### Error Handling
 
@@ -498,25 +380,10 @@ See [references/error_handling.md](references/error_handling.md) for error codes
 
 ## Capability Boundaries
 
-| Capability | Status | Script |
-|---------------------------------|--------------|----------------------------------------------------------|
-| Photo avatar / talking head | Available | `scripts/avatar4.py` |
-| Caption styles | Available | `scripts/avatar4.py list-captions` |
-| Credit management | Available | `scripts/user.py` |
-| Image-to-video (i2v) | Available | `scripts/video_gen.py --type i2v` |
-| Text-to-video (t2v) | Available | `scripts/video_gen.py --type t2v` |
-| Omni reference video | Available | `scripts/video_gen.py --type omni` |
-| Text-to-image | Available | `scripts/ai_image.py --type text2image` |
-| Image editing | Available | `scripts/ai_image.py --type image_edit` |
-| Remove background | Available | `scripts/remove_bg.py` |
-| Product avatar / image replace | Available | `scripts/product_avatar.py` |
-| Product avatar templates | Available | `scripts/product_avatar.py list-avatars` / `list-categories` |
-| Text-to-speech (TTS) | Available | `scripts/text2voice.py` |
-| Voice list / search | Available | `scripts/voice.py list` |
-| Voice cloning | Available | `scripts/voice.py clone` |
-| Delete custom voice | Available | `scripts/voice.py delete` |
-| Board management | Available | `scripts/board.py` |
-| Board task browsing | Available | `scripts/board.py tasks` / `task-detail` |
-| Marketing video (m2v) | No module | Suggest [topview.ai](https://www.topview.ai) web UI |
+Available capabilities are listed in the **Modules** table and the **Step 2 routing table** above. Anything not covered there is out of scope for a module — for example:
 
-> Avoid promising capabilities that don't exist as modules — point users to the [topview.ai](https://www.topview.ai) web UI when something is out of scope.
+| Capability | Status |
+|------------|--------|
+| Marketing video (m2v) | No module — suggest the [topview.ai](https://www.topview.ai) web UI |
+
+> If the user wants a model or feature that isn't listed above, follow the **"query the official docs first, then update the skill"** procedure in [references/updating_models.md](references/updating_models.md). Avoid promising capabilities that don't exist as modules — only point users to the [topview.ai](https://www.topview.ai) web UI when the capability genuinely does not exist in the Topview API.
