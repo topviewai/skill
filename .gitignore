@@ -1,4 +1,12 @@
 __pycache__/
 *.py[cod]
+**/__pycache__/
 scripts/__pycache__/
 scripts/shared/__pycache__/
+topview-generate/scripts/__pycache__/
+topview-generate/scripts/shared/__pycache__/
+# Local API dumps / workspace fixtures (not part of skill packages)
+*API.md
+*.pdf
+topview-skill-workspace/
+evals/

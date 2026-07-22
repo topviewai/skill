@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+# Symlink Topview skills into the host agent's skills directory.
+# Usage: ./setup [--host cursor|claude|codex]
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "$0")" && pwd)"
+HOST="${1:-}"
+if [[ "${HOST}" == "--host" ]]; then
+  HOST="${2:-}"
+fi
+
+detect_host() {
+  if [[ -n "${HOST}" ]]; then
+    echo "${HOST#--host }"
+    return
+  fi
+  if [[ -d "${HOME}/.cursor" ]]; then
+    echo cursor
+  elif [[ -d "${HOME}/.claude" ]]; then
+    echo claude
+  elif [[ -d "${HOME}/.codex" ]]; then
+    echo codex
+  else
+    echo cursor
+  fi
+}
+
+host="$(detect_host)"
+case "$host" in
+  cursor) DEST="${HOME}/.cursor/skills" ;;
+  claude) DEST="${HOME}/.claude/skills" ;;
+  codex) DEST="${HOME}/.codex/skills" ;;
+  *)
+    echo "Unknown host: $host (use cursor|claude|codex)" >&2
+    exit 1
+    ;;
+esac
+
+mkdir -p "$DEST"
+
+SKILLS=(
+  topview-generate
+  topview-amazon-ops
+  topview-tiktok-shop-ops
+  topview-shopee-ops
+  topview-youtube-kol-ops
+)
+
+for skill in "${SKILLS[@]}"; do
+  src="$ROOT/$skill"
+  if [[ ! -d "$src" ]]; then
+    echo "skip missing: $skill" >&2
+    continue
+  fi
+  ln -sfn "$src" "$DEST/$skill"
+  echo "linked $DEST/$skill -> $src"
+done
+
+echo "Done (host=$host). Sign in to topview-mcp via Cursor OAuth or the host MCP login."

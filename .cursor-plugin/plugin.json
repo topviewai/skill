@@ -1,0 +1,27 @@
+{
+  "$schema": "https://cursor.com/schemas/cursor-plugin/plugin.json",
+  "name": "topview",
+  "displayName": "Topview AI",
+  "version": "0.2.0",
+  "description": "Topview AI skills for media generation and ecommerce/KOL MCP research (Amazon, TikTok Shop, Shopee, YouTube KOL).",
+  "author": {
+    "name": "Topview AI",
+    "email": "support@topview.ai"
+  },
+  "publisher": "TopviewAI",
+  "homepage": "https://www.topview.ai",
+  "repository": "https://github.com/topviewai/skill",
+  "license": "Apache-2.0",
+  "category": "ai-content",
+  "keywords": [
+    "topview",
+    "video-generation",
+    "image-generation",
+    "amazon",
+    "tiktok",
+    "shopee",
+    "youtube",
+    "mcp",
+    "ecommerce"
+  ]
+}

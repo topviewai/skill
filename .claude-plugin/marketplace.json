@@ -1,0 +1,17 @@
+{
+  "name": "topview",
+  "owner": {
+    "name": "Topview AI"
+  },
+  "metadata": {
+    "description": "Topview AI skills — media generation + ecommerce/KOL MCP ops"
+  },
+  "plugins": [
+    {
+      "name": "topview",
+      "source": "./",
+      "description": "Install Topview generate + Amazon/TikTok/Shopee/YouTube KOL skills",
+      "version": "0.2.0"
+    }
+  ]
+}
