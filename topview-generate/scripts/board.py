@@ -15,7 +15,7 @@ Subcommands:
     task-detail   Get a single task's full details
 
 Usage:
-    python board.py list [--default] [--page N] [--size N]
+    python board.py list [--default] [--page N] [--size N] [--mode MODE]
     python board.py create --name "Campaign Board"
     python board.py detail --board-id <boardId>
     python board.py update --board-id <boardId> --name "New Name"
@@ -52,7 +52,7 @@ BOARD_WEB_BASE = "https://www.topview.ai/board"
 def cmd_list(args, parser):
     """List boards with optional pagination. --default prints only the default board ID."""
     client = TopviewClient()
-    params = {}
+    params = {"mode": args.mode or "editable-by-me"}
     if args.page:
         params["pageNo"] = str(args.page)
     if args.size:
@@ -374,6 +374,12 @@ Examples:
                         help="Print only the default board ID (for agent auto-discovery)")
     p_list.add_argument("--page", type=int, default=None, help="Page number")
     p_list.add_argument("--size", type=int, default=None, help="Items per page")
+    p_list.add_argument(
+        "--mode",
+        default="editable-by-me",
+        choices=["all", "my-boards", "recently-viewed", "shared-with-me", "editable-by-me"],
+        help="Board list scope (default: editable-by-me)",
+    )
     add_output_args(p_list)
 
     # -- create --

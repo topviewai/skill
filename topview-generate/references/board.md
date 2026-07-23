@@ -7,7 +7,7 @@ board tools exposed by `topview-mcp`.
 
 | Tool | Purpose |
 |---|---|
-| `topview_list_boards` | List boards with pagination |
+| `topview_list_boards` | List boards with pagination (default `mode=editable-by-me`) |
 | `topview_create_board` | Create a named board |
 | `topview_list_board_tasks` | List generated tasks in a board |
 | `topview_get_board_task` | Read one board task |
@@ -16,13 +16,14 @@ Board rename/update and deletion are unavailable through this MCP surface.
 
 ## Request Examples
 
-List boards:
+List boards (defaults to `mode=editable-by-me` — owner/editor boards, suitable for generation; override with `all` / `my-boards` / `recently-viewed` / `shared-with-me` when needed):
 
 ```json
 {
   "req": {
     "pageNo": 1,
-    "pageSize": 20
+    "pageSize": 20,
+    "mode": "editable-by-me"
   }
 }
 ```

@@ -19,6 +19,7 @@ actionable explanation.
 | `4100` | Insufficient credit | Show balance with `topview_get_credit` and suggest recharging at [Topview](https://www.topview.ai/dashboard/home) |
 | `4007` | An unfinished task already exists | Preserve the known task ID when available, wait, and check status; do not create duplicates |
 | `4000` / `4001` / `4003` | Invalid parameter or model | Re-read live generation config, correct the request, and confirm material changes |
+| `DURATION_EXCEEDS_MCP_LIMIT` | Video `duration` above MCP single-clip limit (~15s) | Do not retry the same submit. Call `topview_prepare_canvas_jump` (or ask whether to shorten duration for MCP). Explain Canvas has more features for long / multi-scene work; MCP remains available if they want a shorter clip |
 | `5003` | Service busy | Retry the same safe call after 10–30 seconds; if persistent, ask before changing models |
 | `5000` / `5001` | Internal service error | Retry once; if persistent, report temporary unavailability |
 | `6001` | Safety or security rejection | Explain briefly and offer a compliant prompt revision |

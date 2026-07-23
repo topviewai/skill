@@ -1,7 +1,7 @@
 {
   "mcpServers": {
     "topview-mcp": {
-      "url": "https://mcp.topview.ai"
+      "url": "https://mcp.topview.ai/mcp"
     }
   }
 }

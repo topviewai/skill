@@ -21,7 +21,7 @@ Reload MCP, then verify `topview-mcp` exposes:
 - Meta: `get_tool_schema`, `call_tool`
 - Creative hot tools: `topview_*`, `ta_*`
 
-Production URL: `https://mcp.topview.ai`.
+Production URL: `https://mcp.topview.ai/mcp`.
 
 ## Verify
 
